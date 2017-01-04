@@ -1,0 +1,16 @@
+{
+  "title": "TheMovieDBNet",
+  "version": "0.0.0-*",
+  "buildOptions": {
+    "debugType": "portable",
+    "xmlDoc": true
+  },
+  "dependencies": {},
+  "frameworks": {
+    "netstandard1.4": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.1"
+      }
+    }
+  }
+}
