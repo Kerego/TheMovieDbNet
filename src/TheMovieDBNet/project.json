@@ -1,11 +1,13 @@
 {
   "title": "TheMovieDBNet",
-  "version": "0.0.0-*",
+  "version": "0.0.1",
   "buildOptions": {
     "debugType": "portable",
     "xmlDoc": true
   },
-  "dependencies": {},
+  "dependencies": {
+    "Newtonsoft.Json": "9.0.1"
+  },
   "frameworks": {
     "netstandard1.4": {
       "dependencies": {
