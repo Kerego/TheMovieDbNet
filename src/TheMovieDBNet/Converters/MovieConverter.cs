@@ -1,6 +1,8 @@
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using TheMovieDbNet.Models.Common;
+using TheMovieDbNet.Models.Movies;
 
 namespace TheMovieDbNet.Models
 {
@@ -12,12 +14,12 @@ namespace TheMovieDbNet.Models
         {
             JObject jo = JObject.Load(reader);
             Movie movie = jo.ToObject<Movie>();
-            movie.Videos = jo.SelectToken("videos.results").ToObject<Video[]>();
-            movie.Posters = jo.SelectToken("images.posters").ToObject<Image[]>();
-            movie.Backdrops = jo.SelectToken("images.backdrops").ToObject<Image[]>();
+            movie.Videos = jo.SelectToken("videos.results")?.ToObject<Video[]>();
+            movie.Posters = jo.SelectToken("images.posters")?.ToObject<Image[]>();
+            movie.Backdrops = jo.SelectToken("images.backdrops")?.ToObject<Image[]>();
             return movie;
         }
-
+        
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
