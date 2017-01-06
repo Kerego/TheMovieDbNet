@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace TheMovieDbNet.Models.Movies
 {
     /// <summary>
@@ -5,17 +7,24 @@ namespace TheMovieDbNet.Models.Movies
     /// </summary>
     public class MovieCredits
     {
+        [JsonConstructor]
+        internal MovieCredits(int id, MovieCast[] cast, MovieCrew[] crew)
+        {
+            Id = id;
+            Cast = cast;
+            Crew = crew;
+        }
         /// <summary>
-        /// Gets or Sets the id of the movie credits belong to.
+        /// Gets the id of the movie credits belong to.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; }
         /// <summary>
-        /// Gets or Sets the cast of the movie.
+        /// Gets the cast of the movie.
         /// </summary>
-        public MovieCast[] Cast { get; set; }
+        public MovieCast[] Cast { get; }
         /// <summary>
-        /// Gets or Sets the crew of the movie.
+        /// Gets the crew of the movie.
         /// </summary>
-        public MovieCrew[] Crew { get; set; }
+        public MovieCrew[] Crew { get; }
     }
 }

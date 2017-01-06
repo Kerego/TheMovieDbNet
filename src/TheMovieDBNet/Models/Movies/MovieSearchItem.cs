@@ -7,11 +7,41 @@ namespace TheMovieDbNet.Models.Movies
     /// </summary>
     public class MovieSearchItem : MovieBase
     {
+        [JsonConstructor]
+        internal MovieSearchItem(
+            int id, 
+            bool adult, 
+            string original_language, 
+            string original_title, 
+            double popularity, 
+            string poster_path, 
+            string backdrop_path, 
+            string overview, 
+            string title, 
+            bool video, 
+            double vote_average, 
+            int vote_count, 
+            string release_date,
+            int[] genre_ids) : base(id, 
+                                        adult, 
+                                        original_language, 
+                                        original_title, 
+                                        popularity, 
+                                        poster_path, 
+                                        backdrop_path, 
+                                        overview, 
+                                        title, 
+                                        video, 
+                                        vote_average, 
+                                        vote_count, 
+                                        release_date)
+        {
+            GenreIds = genre_ids;
+        }
+
         /// <summary>
-        /// Gets or Sets an array of genre ids movie belongs to.
+        /// Gets the array with genre ids movie belongs to.
         /// </summary>
-        /// <returns></returns>
-        [JsonProperty("genre_ids")]
-        public int[] GenreIds { get; set; }
+        public int[] GenreIds { get; }
     }
 }

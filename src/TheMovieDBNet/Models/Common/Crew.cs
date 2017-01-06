@@ -7,25 +7,32 @@ namespace TheMovieDbNet.Models.Common
     /// </summary>
     public class Crew
     {
+        [JsonConstructor]
+        internal Crew(int id, string credit_id, string department, string job)
+        {
+            Id = id;
+            CreditId = credit_id;
+            Department = department;
+            Job = job;
+        }
         /// <summary>
-        /// Gets or Sets person identifier.
+        /// Gets the person identifier.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; }
         
         /// <summary>
-        /// Gets or Sets the creditId.
+        /// Gets the credit identifier.
         /// </summary>
-        [JsonProperty("credit_id")]
-        public string CreditId { get; set; }
+        public string CreditId { get; }
 
         /// <summary>
-        /// Gets or Sets the department of crew member.
+        /// Gets the department of crew member.
         /// </summary>
-        public string Department { get; set; }
+        public string Department { get; }
 
         /// <summary>
-        /// Gets or Sets the job of crew member.
+        /// Gets the job of crew member.
         /// </summary>
-        public string Job { get; set; }
+        public string Job { get; }
     }
 }

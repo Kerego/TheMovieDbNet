@@ -3,18 +3,18 @@ using Newtonsoft.Json;
 namespace TheMovieDbNet.Models.Common
 {
     /// <summary>
-    /// Represents info about company that produces movies.
+    /// Represents a keyword from a media.
     /// </summary>
-    public class ProductionCompany : Entity
+    public class Keyword : Entity
     {
         [JsonConstructor]
-        internal ProductionCompany(string name, int id) : base(id)
+        internal Keyword(string name, int id) : base(id)
         {
             Name = name;
         }
 
         /// <summary>
-        /// Gets the name of the company.
+        /// Gets the value of keyword.
         /// </summary>
         public string Name { get; }
     }

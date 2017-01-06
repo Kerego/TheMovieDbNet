@@ -4,102 +4,176 @@ using TheMovieDbNet.Models.Common;
 namespace TheMovieDbNet.Models.Movies
 {
     /// <summary>
-    /// Represents the complete movie details 
+    /// Represents the complete movie details.
     /// </summary>
     public class Movie : MovieBase
     {
-        /// <summary>
-        /// id of the movie on the IMDB Site
-        /// </summary>
-        [JsonProperty("imdb_id")]
-        public string ImdbId { get; set; }
+        [JsonConstructor]
+        internal Movie(
+            int id, 
+            bool adult, 
+            string original_language, 
+            string original_title, 
+            double popularity, 
+            string poster_path, 
+            string backdrop_path, 
+            string overview, 
+            string title, 
+            bool video, 
+            double vote_average, 
+            int vote_count, 
+            string release_date,
+            string imdb_id,
+            int budget,
+            string homepage,
+            MoviesCollection belongs_to_collection,
+            Genre[] genres,
+            ProductionCompany[] production_companies,
+            ProductionCountry[] production_countries,
+            int revenue,
+            int? runtime,
+            SpokenLanguage[] spoken_languages,
+            string status,
+            string tagline) : base( id, 
+                                    adult, 
+                                    original_language, 
+                                    original_title, 
+                                    popularity, 
+                                    poster_path, 
+                                    backdrop_path, 
+                                    overview, 
+                                    title, 
+                                    video, 
+                                    vote_average, 
+                                    vote_count, 
+                                    release_date)
+        {
+            ImdbId = imdb_id;
+            Budget = budget;
+            Homepage = homepage;
+            MovieCollection = belongs_to_collection;
+            Genres = genres;
+            ProductionCompanies = production_companies;
+            ProductionCountries = production_countries;
+            Revenue = revenue;
+            Runtime = runtime;
+            SpokenLanguages = spoken_languages;
+            Status = status;
+            Tagline = tagline;
+        }
 
         /// <summary>
-        /// budget of the movie
+        /// Gets the id of the movie on the IMDB Site.
         /// </summary>
-        public int Budget { get; set; }
+        public string ImdbId { get; }
 
         /// <summary>
-        /// homepage of the movie
+        /// Gets the budget of the movie.
         /// </summary>
-        public string Homepage { get; set; }
-        /// <summary>
-        /// info about the collection of movies the one belongs to
-        /// </summary>
-        [JsonProperty("belongs_to_collection")]
-        public MoviesCollection MovieCollection { get; set; }
+        public int Budget { get; }
 
         /// <summary>
-        /// info about the genres of the movie
+        /// Gets the homepage of the movie.
         /// </summary>
-        public Genre[] Genres { get; set; }
-
+        public string Homepage { get; }
+        /// <summary>
+        /// Gets the info about the collection of movies the one belongs to.
+        /// </summary>
+        public MoviesCollection MovieCollection { get; }
 
         /// <summary>
-        /// info about the companies that produced the movie
+        /// Gets the info about the genres of the movie.
         /// </summary>
-        [JsonProperty("production_companies")]
-        public ProductionCompany[] ProductionCompanies { get; set; }
+        public Genre[] Genres { get; }
 
         /// <summary>
-        /// info about countries that produced the movie
+        /// Gets the info about the companies that produced the movie.
         /// </summary>
-        [JsonProperty("production_countries")]
-        public ProductionCountry[] ProductionCountries { get; set; }
-
+        public ProductionCompany[] ProductionCompanies { get; }
 
         /// <summary>
-        /// total revenue of the movie in $
+        /// Gets the info about countries that produced the movie.
         /// </summary>
-        public int Revenue { get; set; }
+        public ProductionCountry[] ProductionCountries { get; }
 
         /// <summary>
-        /// total runtime of the movie in minutes
+        /// Gets the total revenue of the movie in $.
         /// </summary>
-        public int? Runtime { get; set; }
+        public int Revenue { get; }
 
         /// <summary>
-        /// array of languages that are spoke in the movie
+        /// Gets the total runtime of the movie in minutes.
         /// </summary>
-        [JsonProperty("spoken_languages")]
-        public SpokenLanguage[] SpokenLanguages { get; set; }
+        public int? Runtime { get; }
 
         /// <summary>
-        /// relese status of the movie
+        /// Gets the array of languages that are spoke in the movie.
         /// </summary>
-        public string Status { get; set; }
+        public SpokenLanguage[] SpokenLanguages { get; }
 
         /// <summary>
-        /// tagline of the movie
+        /// Gets the relese status of the movie.
         /// </summary>
-        public string Tagline { get; set; }
+        public string Status { get; }
+
+        /// <summary>
+        /// Gets the tagline of the movie.
+        /// </summary>
+        public string Tagline { get;}
         
+
         /// <summary>
-        /// videos of the movie
+        /// Gets or Sets the videos of the movie.
         /// </summary>
         [JsonIgnore]
         public Video[] Videos { get; set; }
 
         /// <summary>
-        /// backdrop images
+        /// Gets or Sets the backdrop images.
         /// </summary>
         [JsonIgnore]
         public Image[] Backdrops { get; set; }
 
         /// <summary>
-        /// poster images
+        /// Gets or Sets the poster images.
         /// </summary>
         [JsonIgnore]
         public Image[] Posters { get; set; }
 
         /// <summary>
-        /// Gets or Sets the credits for the movie.
+        /// Gets or Sets cast of the movie.
         /// </summary>
-        public MovieCredits Credits { get; set; }
+        [JsonIgnore]
+        public MovieCast[] Cast { get; set; }
+
+        /// <summary>
+        /// Gets or Sets crew of the movie.
+        /// </summary>
+        [JsonIgnore]
+        public MovieCrew[] Crew { get; set;}
 
         /// <summary>
         /// Gets or Sets alternative titles for the movie.
         /// </summary>
-        public AlternativeTitles AlternativeTitles { get; set; }
+        [JsonIgnore]
+        public AlternativeTitle[] AlternativeTitles { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the keywords of the movie.
+        /// </summary>
+        [JsonIgnore]
+        public Keyword[] Keywords { get; set; }
+
+        /// <summary>
+        /// Gets or Sets the release info of the movie.
+        /// </summary>
+        [JsonIgnore]
+        public ReleaseInfo[] ReleaseInfo { get; set; }
+
+        /// <summary>
+        /// Gets or Sets available translation for the movie.
+        /// </summary>
+        [JsonIgnore]
+        public Translation[] Translations { get; set; }
     }
 }

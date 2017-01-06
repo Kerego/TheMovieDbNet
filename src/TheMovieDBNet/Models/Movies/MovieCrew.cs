@@ -8,15 +8,27 @@ namespace TheMovieDbNet.Models.Movies
     /// </summary>
     public class MovieCrew : Crew
     {
-        /// <summary>
-        /// Gets or Sets the name of the person.
-        /// </summary>
-        public string Name { get; set; }
+        [JsonConstructor]
+        internal MovieCrew(
+            int id,
+            string credit_id, 
+            string department, 
+            string job,
+            string name,
+            string profile_path) : base(id, credit_id, department, job)
+        {
+            Name = name;
+            ProfilePath = profile_path;
+        }
 
         /// <summary>
-        /// Gets or Sets the path to the profile of person.
+        /// Gets the name of the person.
         /// </summary>
-        [JsonProperty("profile_path")]
-        public string ProfilePath { get; set; }
+        public string Name { get; }
+
+        /// <summary>
+        /// Gets the path to the profile of person.
+        /// </summary>
+        public string ProfilePath { get; }
     }
 }

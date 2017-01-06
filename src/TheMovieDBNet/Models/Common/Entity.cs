@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace TheMovieDbNet.Models.Common
 {
     /// <summary>
@@ -5,9 +7,14 @@ namespace TheMovieDbNet.Models.Common
     /// </summary>
     public class Entity
     {
+        [JsonConstructor]
+        internal Entity(int id)
+        {
+            Id = id;
+        }
         /// <summary>
-        /// Gets and Sets the id of the object.
+        /// Gets the identity of object.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; }
     }
 }

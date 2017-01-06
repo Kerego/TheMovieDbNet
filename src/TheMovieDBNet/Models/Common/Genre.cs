@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace TheMovieDbNet.Models.Common
 {
     /// <summary>
@@ -5,9 +7,15 @@ namespace TheMovieDbNet.Models.Common
     /// </summary>
     public class Genre : Entity
     {
+        [JsonConstructor]
+        internal Genre(string name, int id) : base(id)
+        {
+            Name = name;
+        }
+
         /// <summary>
-        /// Gets or Sets name of the genre.
+        /// Gets the name of the genre.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
     }
 }

@@ -9,72 +9,95 @@ namespace TheMovieDbNet.Models.Movies
     /// </summary>
     public class MovieBase : Entity
     {
+        internal MovieBase(
+            int id,
+            bool adult,
+            string original_language,
+            string original_title,
+            double popularity,
+            string poster_path,
+            string backdrop_path,
+            string overview,
+            string title,
+            bool video,
+            double vote_average,
+            int vote_count,
+            string release_date        
+        ) : base(id)
+        {
+            Adult = adult;
+            OriginalLanguage = original_language;
+            OriginalTitle = original_title;
+            Popularity = popularity;
+            PosterPath = poster_path;
+            BackdropPath = backdrop_path;
+            Overview = overview;
+            Title = title;
+            Video = video;
+            VoteAverage = vote_average;
+            VoteCount = vote_count;
+            ReleaseDate = release_date;
+        }
+
         /// <summary>
-        /// indicates whether the movie is an adult one or not
+        /// Gets whether the movie is an adult one or not.
         /// </summary>
-        public bool Adult { get; set; }
+        public bool Adult { get; }
         
         /// <summary>
-        /// original language of the movie
+        /// Gets the original language of the movie.
         /// </summary>
-        [JsonProperty("original_language")]
-        public string OriginalLanguage { get; set; }
+        public string OriginalLanguage { get; }
 
         /// <summary>
-        /// title of the movie in original language
+        /// Gets the title of the movie in original language.
         /// </summary>
-        [JsonProperty("original_title")]
-        public string OriginalTitle { get; set; }
+        public string OriginalTitle { get; }
         
         /// <summary>
-        /// popularity of the movie
+        /// Gets the popularity of the movie.
         /// </summary>
-        public double Popularity { get; set; }
+        public double Popularity { get; }
 
         /// <summary>
-        /// path to the poster image
+        /// Gets the path to the poster image.
         /// </summary>
-        [JsonProperty("poster_path")]
-        public string PosterPath { get; set; }
+        public string PosterPath { get; }
 
         /// <summary>
-        /// path to the backdrop
+        /// Gets the path to the backdrop.
         /// </summary>
-        [JsonProperty("backdrop_path")]
-        public string BackdropPath { get; set; }
+        public string BackdropPath { get; }
 
         /// <summary>
-        /// overview of the movie's plot
+        /// Gets the overview of the movie's plot.
         /// </summary>
-        public string Overview { get; set; }
+        public string Overview { get; }
 
         /// <summary>
-        /// title of the movie
+        /// Gets the title of the movie.
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get; }
         
         /// <summary>
-        /// show whether this is a video or movie
+        /// Gets whether this is a video or movie.
         /// </summary>
-        public bool Video { get; set; }
+        public bool Video { get; }
 
         /// <summary>
-        /// average rating of the movie
+        /// Gets the average rating of the movie.
         /// </summary>
-        [JsonProperty("vote_average")]
-        public double VoteAverage { get; set; }
+        public double VoteAverage { get; }
 
         /// <summary>
-        /// vote counts for the movie
+        /// Gets the vote counts for the movie.
         /// </summary>
-        [JsonProperty("vote_count")]
-        public int VoteCount { get; set; }
+        public int VoteCount { get; }
         
         /// <summary>
-        /// realease date of the movie
+        /// Gets the realease date of the movie.
         /// </summary>
-        [JsonProperty("release_date")]
-        public string ReleaseDate { get; set; }
+        public string ReleaseDate { get; }
 
     }
 }

@@ -5,17 +5,22 @@ namespace TheMovieDbNet.Models.Common
     /// <summary>
     /// Represents a title of a media in a specific language.
     /// </summary>
-    public class TranslatedTitle
+    public class AlternativeTitle
     {
+        [JsonConstructor]
+        internal AlternativeTitle(string iso_3166_1, string title)
+        {
+            Iso31661 = iso_3166_1;
+            Title = title;
+        }
         /// <summary>
-        /// Gets or Sets the language of the title.
+        /// Gets the language of the title.
         /// </summary>
-        [JsonProperty("iso_3166_1")]
-        public string Iso31661 { get; set; }
+        public string Iso31661 { get; }
         /// <summary>
-        /// Gets or Sets the title of the media.
+        /// Gets the title of the media.
         /// </summary>
-        public string Title { get; set; }
+        public string Title { get; }
     }
 
 }

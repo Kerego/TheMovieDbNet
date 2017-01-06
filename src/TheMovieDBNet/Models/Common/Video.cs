@@ -7,46 +7,70 @@ namespace TheMovieDbNet.Models.Common
     /// </summary>
     public class Video
     {
-        /// <summary>
-        /// Gets or Sets video identifier
-        /// </summary>
-        /// <returns></returns>
-        public string Id { get; set; }
-        /// <summary>
-        /// standard info
-        /// </summary>
-        [JsonProperty("iso_639_1")]
-        public string Iso6391 { get; set; }
+        [JsonConstructor]
+        internal Video(
+            string id,
+            string iso_639_1,
+            string iso_3166_1,
+            string key,
+            string name,
+            string site,
+            string type,
+            int size
+        )
+        {
+            Id = id;
+            Iso6391 = iso_639_1;
+            Iso31661 = iso_3166_1;
+            Key = key;
+            Name = name;
+            Site = site;
+            Type = type;
+            Size = size;
+        }
 
         /// <summary>
-        /// standard info
+        /// Gets the video identifier.
         /// </summary>
-        [JsonProperty("iso_3166_1")]
-        public string Iso31661 { get; set; }
+        public string Id { get; }
+        /// <summary>
+        /// Gets the standard info.
+        /// </summary>
+        public string Iso6391 { get; }
 
         /// <summary>
-        /// id of the video on external site (usually youtube)
+        /// Gets the standard info.
         /// </summary>
-        public string Key { get; set; }
+        public string Iso31661 { get; }
 
         /// <summary>
-        /// name of the video
+        /// Gets the id of the video on external site (usually youtube).
         /// </summary>
-        public string Name { get; set; }
+        public string Key { get; }
 
         /// <summary>
-        /// site of the video
+        /// Gets the Name of the video.
         /// </summary>
-        public string Site { get; set; }
+        public string Name { get; }
 
         /// <summary>
-        /// quality of the video (eg: 720p)
+        /// Gets the Site of the video.
         /// </summary>
-        public int Size { get; set; }
+        public string Site { get; }
 
         /// <summary>
-        /// type of the video (eg: Trailer)
+        /// Gets the quality of the video (eg: 720p).
         /// </summary>
-        public string Type { get; set; }
+        public int Size { get; }
+
+        /// <summary>
+        /// Gets the type of the video (eg: Trailer).
+        /// </summary>
+        public string Type { get; }
+
+        /// <summary>
+        /// Gets full link to the video; works only for youtube videos.
+        /// </summary>
+        public string FullPath => $"https://youtube.com/watch?v={Key}";
     }
 }

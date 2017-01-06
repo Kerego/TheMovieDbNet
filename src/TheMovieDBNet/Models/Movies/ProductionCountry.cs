@@ -3,20 +3,25 @@ using Newtonsoft.Json;
 namespace TheMovieDbNet.Models.Movies
 {
     /// <summary>
-    /// info about country that produces movies
+    /// Represents a country that produces movies
     /// </summary>
     public class ProductionCountry
     {
+        [JsonConstructor]
+        internal ProductionCountry(string iso_3166_1, string name)
+        {
+            Iso31661 = iso_3166_1;
+            Name = name;
+        }
         /// <summary>
-        /// iso_3166_1 name of country
+        /// Gets the iso_3166_1 name of country
         /// </summary>
-        [JsonProperty("iso_3166_1")]
-        public string Iso31661 { get; set; }
+        public string Iso31661 { get; }
 
         /// <summary>
-        /// name of the country
+        /// Gets the name of the country
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; }
     }
 
 }

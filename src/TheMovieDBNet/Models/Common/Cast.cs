@@ -7,19 +7,26 @@ namespace TheMovieDbNet.Models.Common
     /// </summary>
     public class Cast
     {
+        [JsonConstructor]
+        internal Cast(int id, string character, string credit_id)
+        {
+            Id = id;
+            Character = character;
+            CreditId = credit_id;
+        }
+
         /// <summary>
-        /// Gets or Sets the name of character of cast.
+        /// Gets the character name.
         /// </summary>
-        public string Character { get; set; }
+        public string Character { get; }
         /// <summary>
-        /// Gets or Sets identifier of coresponding credit.
+        /// Gets identifier of coresponding credit.
         /// </summary>
-        [JsonProperty("credit_id")]
-        public string CreditId { get; set; }
+        public string CreditId { get; }
         
         /// <summary>
-        /// Gets or Sets person identifier.
+        /// Gets person identifier.
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; }
     }
 }

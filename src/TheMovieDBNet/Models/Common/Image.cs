@@ -3,53 +3,66 @@ using Newtonsoft.Json;
 namespace TheMovieDbNet.Models.Common
 {
     /// <summary>
-    /// info about an image
+    /// Represents data about a image.
     /// </summary>
     public class Image
     {
+        [JsonConstructor]
+        internal Image(
+            double aspect_ratio, 
+            string file_path, 
+            int height,
+            int width,
+            string iso_639_1,
+            double vote_average,
+            int vote_count)
+        {
+            AspectRatio = aspect_ratio;
+            FilePath = file_path;
+            Height = height;
+            Width = width;
+            Iso6391 = iso_639_1;
+            VoteAverage = vote_average;
+            VoteCount = vote_count;
+        }
         /// <summary>
-        /// full path to the resource in original resolution
+        /// Gets full path to the resource in original resolution.
         /// </summary>
-        [JsonIgnore]
         public string FullPathOriginal => $"https://image.tmdb.org/t/p/original{FilePath}";
+        
         /// <summary>
-        /// aspect ratio of the image
+        /// Gets the aspect ratio of the image.
         /// </summary>
-        [JsonProperty("aspect_ratio")]
-        public double AspectRatio { get; set; }
+        public double AspectRatio { get; }
 
         /// <summary>
-        /// path to the image
+        /// Gets the path to the image.
         /// </summary>
-        [JsonProperty("file_path")]
-        public string FilePath { get; set; }
+        public string FilePath { get; }
 
         /// <summary>
-        /// height of the image in pixels
+        /// Gets the height of the image in pixels
         /// </summary>
-        public int Height { get; set; }
+        public int Height { get; }
 
         /// <summary>
-        /// standard info 
+        /// Gets the iso_639_1 standard info 
         /// </summary>
-        [JsonProperty("iso_639_1")]
-        public string Iso6391 { get; set; }
+        public string Iso6391 { get; }
 
         /// <summary>
-        /// average rating of the image
+        /// Gets the average rating of the image
         /// </summary>
-        [JsonProperty("vote_average")]
-        public double VoteAverage { get; set; }
+        public double VoteAverage { get; }
 
         /// <summary>
-        /// number of votes for the image
+        /// Gets the number of votes for the image
         /// </summary>
-        [JsonProperty("vote_count")]
-        public int VoteCount { get; set; }
+        public int VoteCount { get; }
 
         /// <summary>
-        /// width of the image in pixels
+        /// Gets the width of the image in pixels
         /// </summary>
-        public int Width { get; set; }
+        public int Width { get; }
     }
 }

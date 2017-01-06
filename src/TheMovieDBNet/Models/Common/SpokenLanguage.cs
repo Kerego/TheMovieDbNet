@@ -3,20 +3,25 @@ using Newtonsoft.Json;
 namespace TheMovieDbNet.Models.Common
 {
     /// <summary>
-    /// info about a language spoken in a movie
+    /// Represents info about the language spoken in a movie
     /// </summary>
     public class SpokenLanguage
     {
-        /// <summary>
-        /// iso_639_1 name of language
-        /// </summary>
-        [JsonProperty("iso_639_1")]
-        public string Iso6391 { get; set; }
+        [JsonConstructor]
+        internal SpokenLanguage(string iso_639_1, string name)
+        {
+            Iso6391 = iso_639_1;
+            Name = name;
+        }
 
         /// <summary>
-        /// human name of language
+        /// Gets the iso_639_1 name of language
         /// </summary>
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        public string Iso6391 { get; }
+
+        /// <summary>
+        /// Gets the human name of language
+        /// </summary>
+        public string Name { get; }
     }
 }

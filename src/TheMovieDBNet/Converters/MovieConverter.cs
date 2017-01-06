@@ -17,6 +17,12 @@ namespace TheMovieDbNet.Models
             movie.Videos = jo.SelectToken("videos.results")?.ToObject<Video[]>();
             movie.Posters = jo.SelectToken("images.posters")?.ToObject<Image[]>();
             movie.Backdrops = jo.SelectToken("images.backdrops")?.ToObject<Image[]>();
+            movie.Cast = jo.SelectToken("credits.cast")?.ToObject<MovieCast[]>();
+            movie.Crew = jo.SelectToken("credits.crew")?.ToObject<MovieCrew[]>();
+            movie.AlternativeTitles = jo.SelectToken("alternative_titles.titles")?.ToObject<AlternativeTitle[]>();
+            movie.Keywords = jo.SelectToken("keywords.keywords")?.ToObject<Keyword[]>();
+            movie.ReleaseInfo = jo.SelectToken("release_dates.results")?.ToObject<ReleaseInfo[]>();
+            movie.Translations = jo.SelectToken("translations.translations")?.ToObject<Translation[]>();
             return movie;
         }
         

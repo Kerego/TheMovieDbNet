@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using TheMovieDbNet.Models;
+using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
 
 namespace TheMovieDbNet.Services

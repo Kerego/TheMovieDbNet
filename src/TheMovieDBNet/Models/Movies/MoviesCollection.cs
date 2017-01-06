@@ -8,21 +8,27 @@ namespace TheMovieDbNet.Models.Movies
     /// </summary>
     public class MoviesCollection : Entity
     {
-        /// <summary>
-        /// name of the collection
-        /// </summary>
-        public string Name { get; set; }
+        [JsonConstructor]
+        internal MoviesCollection(int id, string name, string poster_path, string backdrop_path) : base(id)
+        {
+            Name = name;
+            PosterPath = poster_path;
+            BackdropPath = backdrop_path;
+        }
 
         /// <summary>
-        /// path to the poster image
+        /// Gets the name of the collection
         /// </summary>
-        [JsonProperty("poster_path")]
-        public string PosterPath { get; set; }
+        public string Name { get; }
 
         /// <summary>
-        /// path to the backdrop
+        /// Gets the path to the poster image
+        /// </summary>]
+        public string PosterPath { get; }
+
+        /// <summary>
+        /// Gets the path to the backdrop
         /// </summary>
-        [JsonProperty("backdrop_path")]
-        public string BackdropPath { get; set; }
+        public string BackdropPath { get; }
     }
 }

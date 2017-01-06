@@ -8,26 +8,41 @@ namespace TheMovieDbNet.Models.Movies
     /// </summary>
     public class MovieCast : Cast
     {
-        /// <summary>
-        /// Gets or Sets identifier of the cast.
-        /// </summary>
-        [JsonProperty("cast_id")]
-        public int CastId { get; set; }
+        
+        [JsonConstructor]
+        internal MovieCast(
+            int id, 
+            string character, 
+            string credit_id,
+            int cast_id,
+            string name,
+            int order,
+            string profile_path) : base(id, character, credit_id)
+        {
+            CastId = cast_id;
+            Name = name;
+            Order = order;
+            ProfilePath = profile_path;
+        }
 
         /// <summary>
-        /// Gets or Sets the name of the person.
+        /// Gets the identifier of the cast.
         /// </summary>
-        public string Name { get; set; }
+        public int CastId { get; }
 
         /// <summary>
-        /// Gets or Sets the name of the order.
+        /// Gets the name of the person.
         /// </summary>
-        public int Order { get; set; }
+        public string Name { get;}
 
         /// <summary>
-        /// Gets or Sets the path to the profile of the person
+        /// Gets the order of cast.
         /// </summary>
-        [JsonProperty("profile_path")]
-        public string ProfilePath { get; set; }
+        public int Order { get;  }
+
+        /// <summary>
+        /// Gets the path to profile of the person.
+        /// </summary>
+        public string ProfilePath { get; }
     }
 }
