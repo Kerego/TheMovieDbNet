@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using TheMovieDbNet.Models;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
 
@@ -11,6 +10,13 @@ namespace TheMovieDbNet.Services
 	/// </summary>
 	public interface IMovieService
 	{
+
+		/// <summary>
+		/// Gets details of a movie.
+		/// </summary>
+		/// <param name="id">Movie identifier.</param>
+		/// <returns>Object of type Movie with fields filled with data.</returns>
+		Task<Movie> GetDetailsAsync(int id);
 		/// <summary>
 		/// Gets details of a movie.
 		/// </summary>

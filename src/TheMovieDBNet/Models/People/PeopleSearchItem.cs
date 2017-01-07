@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
 using TheMovieDbNet.Models.TVs;
 
@@ -8,7 +7,7 @@ namespace TheMovieDbNet.Models.People
 	/// <summary>
 	/// Represents an item from people search.
 	/// </summary>
-	public class PeopleSearchItem : Entity
+	public class PeopleSearchItem : PersonBase
 	{
 		[JsonConstructor]
 		internal PeopleSearchItem(
@@ -16,33 +15,10 @@ namespace TheMovieDbNet.Models.People
 			string profile_path,
 			bool adult,
 			string name,
-			double popularity) : base(id)
+			double popularity)
+		: base(id, profile_path, adult, name, popularity)
 		{
-			ProfilePath = profile_path;
-			Adult = adult;
-			Name = name;
-			Popularity = popularity;
 		}
-
-		/// <summary>
-		/// Gets the path to the profile picture.
-		/// </summary>
-		public string ProfilePath { get; }
-
-		/// <summary>
-		/// Gets whether actor was involved in adult industry.
-		/// </summary>
-		public bool Adult { get; }
-
-		/// <summary>
-		/// Gets the name of the person.
-		/// </summary>
-		public string Name { get; }
-
-		/// <summary>
-		/// Gets the popularity of the person
-		/// </summary>
-		public double Popularity { get; }
 		
 		/// <summary>
 		/// Gets or Sets the movies person is known for.

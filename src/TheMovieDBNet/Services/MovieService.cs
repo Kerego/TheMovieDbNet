@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using TheMovieDbNet.Converters;
-using TheMovieDbNet.Models;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
 
@@ -236,6 +234,15 @@ namespace TheMovieDbNet.Services
 		/// <returns>Object of type Movie with fields filled with data.</returns>
 		public async Task<Movie> GetDetailsAsync(int id, MovieAppendSettings settings)
 			=> await GetDetailsAsync(id, settings.ToString());
+
+			
+		/// <summary>
+		/// Gets details of a movie.
+		/// </summary>
+		/// <param name="id">Movie identifier.</param>
+		/// <returns>Object of type Movie with fields filled with data.</returns>
+		public async Task<Movie> GetDetailsAsync(int id) 
+			=> await GetDetailsAsync(id, string.Empty);
 
 		/// <summary>
 		/// Gets a page of movies based on search query.
