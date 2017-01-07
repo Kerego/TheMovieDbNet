@@ -30,23 +30,26 @@ namespace TheMovieDbNet.Models.Movies
             Genre[] genres,
             ProductionCompany[] production_companies,
             ProductionCountry[] production_countries,
-            int revenue,
+            long revenue,
             int? runtime,
             SpokenLanguage[] spoken_languages,
             string status,
-            string tagline) : base( id, 
-                                    adult, 
-                                    original_language, 
-                                    original_title, 
-                                    popularity, 
-                                    poster_path, 
-                                    backdrop_path, 
-                                    overview, 
-                                    title, 
-                                    video, 
-                                    vote_average, 
-                                    vote_count, 
-                                    release_date)
+            string tagline,
+            SearchResult<MovieSearchItem> recommendations,
+            SearchResult<MovieSearchItem> similar_movies) 
+                : base( id, 
+                        adult, 
+                        original_language, 
+                        original_title, 
+                        popularity, 
+                        poster_path, 
+                        backdrop_path, 
+                        overview, 
+                        title, 
+                        video, 
+                        vote_average, 
+                        vote_count, 
+                        release_date)
         {
             ImdbId = imdb_id;
             Budget = budget;
@@ -60,6 +63,8 @@ namespace TheMovieDbNet.Models.Movies
             SpokenLanguages = spoken_languages;
             Status = status;
             Tagline = tagline;
+            Recommendations = recommendations;
+            SimilarMovies = similar_movies;
         }
 
         /// <summary>
@@ -99,7 +104,7 @@ namespace TheMovieDbNet.Models.Movies
         /// <summary>
         /// Gets the total revenue of the movie in $.
         /// </summary>
-        public int Revenue { get; }
+        public long Revenue { get; }
 
         /// <summary>
         /// Gets the total runtime of the movie in minutes.
@@ -121,6 +126,17 @@ namespace TheMovieDbNet.Models.Movies
         /// </summary>
         public string Tagline { get;}
         
+        
+
+        /// <summary>
+        /// Gets or Sets the Recommendations for the movie.
+        /// </summary>
+        public SearchResult<MovieSearchItem> Recommendations { get; set; }
+        
+        /// <summary>
+        /// Gets or Sets the similar movies.
+        /// </summary>
+        public SearchResult<MovieSearchItem> SimilarMovies { get; set; }
 
         /// <summary>
         /// Gets or Sets the videos of the movie.
