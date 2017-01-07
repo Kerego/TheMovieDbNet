@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using TheMovieDbNet.Converters;
 using TheMovieDbNet.Models;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
@@ -12,12 +13,15 @@ namespace TheMovieDbNet.Services
 	/// </summary>
 	public class MovieService : Service, IMovieService
 	{
+		private Lazy<MovieConverter> _lazyConverter = new Lazy<MovieConverter>(() => new MovieConverter(), true);
+
 		/// <summary>
 		/// Initializes a new instance of MovieService.
 		/// </summary>
 		/// <param name="apiKey">API key from the movie db developer site</param>
 		public MovieService(string apiKey) : base(apiKey)
 		{
+
 		}
 
 		/// <summary>
@@ -25,7 +29,8 @@ namespace TheMovieDbNet.Services
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
 		/// <returns>Array of Alternative Titles for movie.</returns>
-		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id) => await GetAlternativeTitlesAsync(id, string.Empty);
+		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id) 
+			=> await GetAlternativeTitlesAsync(id, string.Empty);
 
 		/// <summary>
 		/// Gets translated titles of the movie.
@@ -220,13 +225,7 @@ namespace TheMovieDbNet.Services
 		public async Task<Movie> GetDetailsAsync(int id, string append)
 		{
 			var path = $"/3/movie/{id}?api_key={apiKey}&append_to_response={append}";
-			using (var result = await httpClient.GetAsync(path))
-			{
-				var content = await result.Content.ReadAsStringAsync();
-				if (!result.IsSuccessStatusCode)
-					throw new Exception(content); //TODO use specific exception not the base
-				return JsonConvert.DeserializeObject<Movie>(content, new MovieConverter());
-			}
+			return await RequestAndDeserialize<Movie>(path, _lazyConverter.Value);
 		}
 
 		/// <summary>
@@ -246,13 +245,7 @@ namespace TheMovieDbNet.Services
 		public async Task<SearchResult<MovieSearchItem>> SearchAsync(MovieSearchSettings settings)
 		{
 			var path = $"/3/search/movie?api_key={apiKey}{settings}";
-			using (var result = await httpClient.GetAsync(path))
-			{
-				var content = await result.Content.ReadAsStringAsync();
-				if (!result.IsSuccessStatusCode)
-					throw new Exception(content); //TODO use specific exception not the base
-				return JsonConvert.DeserializeObject<SearchResult<MovieSearchItem>>(content);
-			}
+			return await RequestAndDeserialize<SearchResult<MovieSearchItem>>(path);
 		}
 
 		/// <summary>

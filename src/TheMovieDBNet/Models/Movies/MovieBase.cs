@@ -7,8 +7,9 @@ namespace TheMovieDbNet.Models.Movies
 	/// <summary>
 	/// Represents base class for object containing info about movies.
 	/// </summary>
-	public class MovieBase : Entity
+	public class MovieBase : MediaBase
 	{
+		[JsonConstructor]
 		internal MovieBase(
 			int id,
 			bool adult,
@@ -22,20 +23,21 @@ namespace TheMovieDbNet.Models.Movies
 			bool video,
 			double vote_average,
 			int vote_count,
-			string release_date        
-		) : base(id)
+			string release_date) 
+		: base(
+			id,
+			popularity,
+			poster_path,
+			backdrop_path,
+			overview,
+			vote_average,
+			vote_count)
 		{
 			Adult = adult;
 			OriginalLanguage = original_language;
 			OriginalTitle = original_title;
-			Popularity = popularity;
-			PosterPath = poster_path;
-			BackdropPath = backdrop_path;
-			Overview = overview;
 			Title = title;
 			Video = video;
-			VoteAverage = vote_average;
-			VoteCount = vote_count;
 			ReleaseDate = release_date;
 		}
 
@@ -55,44 +57,13 @@ namespace TheMovieDbNet.Models.Movies
 		public string OriginalTitle { get; }
 		
 		/// <summary>
-		/// Gets the popularity of the movie.
+		/// Gets whether this is a video.
 		/// </summary>
-		public double Popularity { get; }
-
-		/// <summary>
-		/// Gets the path to the poster image.
-		/// </summary>
-		public string PosterPath { get; }
-
-		/// <summary>
-		/// Gets the path to the backdrop.
-		/// </summary>
-		public string BackdropPath { get; }
-
-		/// <summary>
-		/// Gets the overview of the movie's plot.
-		/// </summary>
-		public string Overview { get; }
-
+		public bool Video { get; }
 		/// <summary>
 		/// Gets the title of the movie.
 		/// </summary>
 		public string Title { get; }
-		
-		/// <summary>
-		/// Gets whether this is a video or movie.
-		/// </summary>
-		public bool Video { get; }
-
-		/// <summary>
-		/// Gets the average rating of the movie.
-		/// </summary>
-		public double VoteAverage { get; }
-
-		/// <summary>
-		/// Gets the vote counts for the movie.
-		/// </summary>
-		public int VoteCount { get; }
 		
 		/// <summary>
 		/// Gets the realease date of the movie.

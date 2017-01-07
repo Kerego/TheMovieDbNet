@@ -31,6 +31,22 @@ namespace TheMovieDbNet.Services
 			httpClient.BaseAddress = new Uri("https://api.themoviedb.org/3/");
 		}
 
+		/// <summary>
+		/// Makes a request to the path and then deserialize the result to the generic constraint.
+		/// </summary>
+		/// <param name="path">Path to the content.</param>
+		/// <param name="customConverter">Custom Converter for deserialization.</param>
+		/// <returns>The <typeparamref name="T"/> deserialized from json response.</returns>
+		protected async Task<T> RequestAndDeserialize<T>(string path, JsonConverter customConverter)
+		{
+			using (var result = await httpClient.GetAsync(path))
+			{
+				var content = await result.Content.ReadAsStringAsync();
+				if (!result.IsSuccessStatusCode)
+					throw new Exception(content); //TODO use specific exception not the base
+				return JsonConvert.DeserializeObject<T>(content, customConverter);
+			}
+		}
 		
 		/// <summary>
 		/// Makes a request to the path and then deserialize the result to the generic constraint.

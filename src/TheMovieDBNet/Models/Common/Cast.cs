@@ -14,7 +14,7 @@ namespace TheMovieDbNet.Models.Common
 			Character = character;
 			CreditId = credit_id;
 		}
-
+		
 		/// <summary>
 		/// Gets the character name.
 		/// </summary>

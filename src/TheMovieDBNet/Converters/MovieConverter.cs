@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
 
-namespace TheMovieDbNet.Models
+namespace TheMovieDbNet.Converters
 {
 	internal class MovieConverter : JsonConverter
 	{
