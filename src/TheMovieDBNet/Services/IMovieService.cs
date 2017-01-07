@@ -61,6 +61,14 @@ namespace TheMovieDbNet.Services
         /// </summary>
         /// <param name="id">Movie identifier.</param>
         /// <param name="language">Language of the image.</param>
+        /// <returns>Collection with the images of the movie.</returns>
+        Task<ImageCollection> GetImagesAsync(int id, string language);
+
+        /// <summary>
+        /// Gets the images of the movie.
+        /// </summary>
+        /// <param name="id">Movie identifier.</param>
+        /// <param name="language">Language of the image.</param>
         /// <param name="includeLanguages">Additional Languages to add to the image.</param>
         /// <returns>Collection with the images of the movie.</returns>
         Task<ImageCollection> GetImagesAsync(int id, string language, string includeLanguages);

@@ -60,6 +60,16 @@ namespace TheMovieDbNet.Services
         public async Task<ImageCollection> GetImagesAsync(int id) 
             => await GetImagesAsync(id, string.Empty, string.Empty);
 
+        
+        /// <summary>
+        /// Gets the images of the movie.
+        /// </summary>
+        /// <param name="id">Movie identifier.</param>
+        /// <param name="language">Language of the image.</param>
+        /// <returns>Collection with the images of the movie.</returns>
+        public async Task<ImageCollection> GetImagesAsync(int id, string language)
+            => await GetImagesAsync(id, language, string.Empty);
+
         /// <summary>
         /// Gets the images of the movie.
         /// </summary>
