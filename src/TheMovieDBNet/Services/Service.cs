@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -42,6 +43,11 @@ namespace TheMovieDbNet.Services
 			using (var result = await httpClient.GetAsync(path))
 			{
 				var content = await result.Content.ReadAsStringAsync();
+				if((int)result.StatusCode == 429)
+				{
+					await Task.Delay((int)result.Headers.RetryAfter.Delta.Value.TotalMilliseconds + 100);
+					return await RequestAndDeserialize<T>(path, customConverter);
+				}
 				if (!result.IsSuccessStatusCode)
 					throw new Exception(content); //TODO use specific exception not the base
 				return JsonConvert.DeserializeObject<T>(content, customConverter);
@@ -58,6 +64,11 @@ namespace TheMovieDbNet.Services
 			using (var result = await httpClient.GetAsync(path))
 			{
 				var content = await result.Content.ReadAsStringAsync();
+				if((int)result.StatusCode == 429)
+				{
+					await Task.Delay((int)result.Headers.RetryAfter.Delta.Value.TotalMilliseconds + 100);
+					return await RequestAndDeserialize<T>(path);
+				}
 				if (!result.IsSuccessStatusCode)
 					throw new Exception(content); //TODO use specific exception not the base
 				return JsonConvert.DeserializeObject<T>(content);
@@ -75,6 +86,11 @@ namespace TheMovieDbNet.Services
 			using (var result = await httpClient.GetAsync(path))
 			{
 				var content = await result.Content.ReadAsStringAsync();
+				if((int)result.StatusCode == 429)
+				{
+					await Task.Delay((int)result.Headers.RetryAfter.Delta.Value.TotalMilliseconds + 100);
+					return await RequestAndSelect<T>(path, token);
+				}
 				if (!result.IsSuccessStatusCode)
 					throw new Exception(content); //TODO use specific exception not the base
 				JObject obj = JObject.Parse(content);

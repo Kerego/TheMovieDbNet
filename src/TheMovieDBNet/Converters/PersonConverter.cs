@@ -25,7 +25,6 @@ namespace TheMovieDbNet.Converters
 					?.Where(x => (string)x["media_type"] == "movie")
 					.Select(x => x.ToObject<PersonMovieCast>()).ToArray();
 			
-			
 			person.MovieCrew = jo
 				.SelectToken("movie_credits.crew")
 				?.ToObject<PersonMovieCrew[]>()
@@ -33,14 +32,12 @@ namespace TheMovieDbNet.Converters
 					?.Where(x => (string)x["media_type"] == "movie")
 					.Select(x => x.ToObject<PersonMovieCrew>()).ToArray();
 			
-			
 			person.TVCast = jo
 				.SelectToken("tv_credits.cast")
 				?.ToObject<PersonTVCast[]>()
 				?? 	jo.SelectToken("combined_credits.cast")
 					?.Where(x => (string)x["media_type"] == "tv")
 					.Select(x => x.ToObject<PersonTVCast>()).ToArray();
-
 			
 			person.TVCrew = jo
 				.SelectToken("tv_credits.crew")
@@ -48,7 +45,7 @@ namespace TheMovieDbNet.Converters
 				?? 	jo.SelectToken("combined_credits.crew")
 					?.Where(x => (string)x["media_type"] == "tv")
 					.Select(x => x.ToObject<PersonTVCrew>()).ToArray();
-				 
+					
 			person.Images = jo.SelectToken("images.profiles")?.ToObject<Image[]>();
 
 			person.MovieTaggedImages = jo

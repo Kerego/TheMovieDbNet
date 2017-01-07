@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using TheMovieDbNet.Models.People;
 using TheMovieDbNet.Models.Common;
 using System.Collections.Generic;
+using System;
 
 namespace ConsoleApplication
 {
@@ -16,7 +17,18 @@ namespace ConsoleApplication
 		public static void Main(string[] args)
 		{
 			// MovieServiceScenario(args);
-			PeopleServiceScenario(args);
+			// PeopleServiceScenario(args);
+			CompanyServiceScenario(args);
+		}
+
+		public static void CompanyServiceScenario(string[] args)
+		{
+			var api = File.ReadAllText("src/Samples/secrets.txt");
+			var service = new CompanyService(api);
+
+			var data = service.SearchAsync("Marvel").Result;
+			var details = service.GetDetailsAsync(data.Results.First().Id).Result;
+			System.Console.WriteLine();
 		}
 
 		public static void PeopleServiceScenario(string[] args)
@@ -25,7 +37,8 @@ namespace ConsoleApplication
 			var service = new PeopleService(api);
 			int page = 1;
 			var data = service.SearchAsync(
-				new PeopleSearchSettings {
+				new PeopleSearchSettings
+				{
 					Query = (args.Any() ? args[0] : "bateman"),
 					AllowAdult = true,
 					Page = page
@@ -39,7 +52,7 @@ namespace ConsoleApplication
 			// 	.ToString();
 			// Console.WriteLine(actorsAndMovies);
 
-			var best = data.Results.OrderByDescending(x=>x.Popularity).First();
+			var best = data.Results.OrderByDescending(x => x.Popularity).First();
 
 			var settings = new PersonAppendSettings();
 			settings.IncludeTVCredits = true;
@@ -47,32 +60,43 @@ namespace ConsoleApplication
 			settings.IncludeMovieCredits = true;
 			settings.IncludeTaggedImages = true;
 			settings.IncludeCombinedCredits = true;
-			
-			//one request
-			var details = service.GetDetailsAsync(best.Id, settings).Result;
 
-			var images = service.GetImagesAsync(best.Id).Result;
-			var taggedImages = service.GetTaggedImagesAsync(best.Id, 2).Result;
+			// //one request
+			// var details = service.GetDetailsAsync(best.Id, settings).Result;
+
+			// //multiple
+			// var images = service.GetImagesAsync(best.Id).Result;
+			// var taggedImages = service.GetTaggedImagesAsync(best.Id, 2).Result;
 			var credits = service.GetCreditsAsync(best.Id).Result;
 
-			// SaveImages(new Dictionary<string, Image[]> {
-			// 	[details.Name] = taggedImages.MovieTaggedImages.Cast<Image>().Concat(taggedImages.TVTaggedImages).ToArray()
-			// }).Wait();
-
-			var movieservice = new MovieService(api);
-			var tasks = credits.MovieCast.Select(x => 
+			int currentPage = 1;
+			List<Image> images = new List<Image>();
+			TaggedImageCollection taggedImages;
+			do
 			{
-				return Task.Run(async () => {
-					return await movieservice.GetDetailsAsync(x.Id);
-				});
-			});
+				taggedImages = service.GetTaggedImagesAsync(best.Id, currentPage).Result;
+				images.AddRange(taggedImages.MovieTaggedImages.Cast<Image>().Concat(taggedImages.TVTaggedImages));
+			} while (currentPage++ < taggedImages.TotalPages);
 
-			var movies = Task.WhenAll(tasks).Result;
-			System.Console.WriteLine(details.Name + " " + details.Id);
-			foreach (var item in movies.OrderBy(x=>x.VoteAverage))
-				System.Console.WriteLine($"{item.VoteAverage, 2} - {item.Title, -40} - {item.Genres.Select(x=>x.Name).Aggregate("", (a,c) => $"{a} | {c}"), -20}");
+			SaveImages(new Dictionary<string, Image[]>
+			{
+				[best.Name] = images.ToArray()
+			}).Wait();
 
-			// SavePhotos(best.MoviesKnownFor, movieservice).Wait();
+
+			// var movieservice = new MovieService(api);
+			// var tasks = credits.MovieCast.Select(x => 
+			// {
+			// 	return Task.Run(async () => {
+			// 		return await movieservice.GetDetailsAsync(x.Id);
+			// 	});
+			// });
+
+			// var movies = Task.WhenAll(tasks).Result;
+			// System.Console.WriteLine(best.Name + " " + best.Id);
+			// foreach (var item in movies.OrderBy(x=>x.VoteAverage))
+			// 	System.Console.WriteLine($"{item.VoteAverage, 2} - {item.Title, -40} - {item.Genres.Select(x=>x.Name).Aggregate("", (a,c) => $"{a} | {c}"), -20}");
+
 		}
 
 		public static async Task SaveImages(Dictionary<string, Image[]> data)
@@ -81,11 +105,12 @@ namespace ConsoleApplication
 			foreach (var item in data)
 			{
 				Directory.CreateDirectory($"results/{item.Key}");
-				for(int i = 0; i < item.Value.Length; i++)
+				var tasks = item.Value.Select(x => Task.Run(async () =>
 				{
-					var bytes = await client.GetByteArrayAsync(item.Value[i].FullPathOriginal);
-					File.WriteAllBytes($"results/{item.Key}/{i}.jpg", bytes);
-				}
+					var bytes = await client.GetByteArrayAsync(x.FullPathOriginal);
+					File.WriteAllBytes($"results/{item.Key}/{Guid.NewGuid()}.jpg", bytes);
+				}));
+				await Task.WhenAll(tasks);
 			}
 		}
 
@@ -139,18 +164,18 @@ namespace ConsoleApplication
 			foreach (var item in data)
 			{
 				var title = item.Title;
-				if(!Regex.IsMatch(item.Title, @"^[a-zA-Z]+$"))
+				if (!Regex.IsMatch(item.Title, @"^[a-zA-Z]+$"))
 				{
 					title = item.Title.Replace(":", "");
 					title = title.Replace("?", "");
 				}
 				System.Console.WriteLine(title);
-				var release = (string.IsNullOrWhiteSpace(item.ReleaseDate) ? "none" : item.ReleaseDate.Substring(0,4));
+				var release = (string.IsNullOrWhiteSpace(item.ReleaseDate) ? "none" : item.ReleaseDate.Substring(0, 4));
 				title = $"{item.VoteAverage} - {release} - {title}";
 				Directory.CreateDirectory($"results/{title}");
 				var details = await service.GetDetailsAsync(item.Id, "images,credits");
 				//photos
-				var bestPhotos = details.Backdrops.Concat(details.Posters).OrderByDescending(x=>x.VoteAverage).Take(10).ToArray();
+				var bestPhotos = details.Backdrops.Concat(details.Posters).OrderByDescending(x => x.VoteAverage).Take(10).ToArray();
 				for (int i = 0; i < bestPhotos.Length; i++)
 				{
 					var bytes = await httpclient.GetByteArrayAsync(bestPhotos[i].FullPathOriginal);
