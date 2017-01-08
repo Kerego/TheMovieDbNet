@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace TheMovieDbNet.Models.Common
+namespace TheMovieDbNet.Models.Movies
 {
 	/// <summary>
 	/// Represents realease date along with certification.
@@ -10,7 +10,7 @@ namespace TheMovieDbNet.Models.Common
 	{
 		[JsonConstructor]
 		internal ReleaseDate(
-			int type,
+			ReleaseType type,
 			string certification,
 			string note,
 			string iso_639_1,
@@ -45,6 +45,6 @@ namespace TheMovieDbNet.Models.Common
 		/// <summary>
 		/// Gets type of release.
 		/// </summary>
-		public int Type { get; }
+		public ReleaseType Type { get; }
 	}
 }

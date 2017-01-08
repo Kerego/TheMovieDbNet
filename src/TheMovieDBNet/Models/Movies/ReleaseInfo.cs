@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace TheMovieDbNet.Models.Common
+namespace TheMovieDbNet.Models.Movies
 {
 	/// <summary>
 	/// Represents data about release along with country of release.
