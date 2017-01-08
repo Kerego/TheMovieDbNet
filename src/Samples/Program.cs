@@ -9,6 +9,7 @@ using TheMovieDbNet.Models.People;
 using TheMovieDbNet.Models.Common;
 using System.Collections.Generic;
 using System;
+using TheMovieDbNet.Models.TVs;
 
 namespace ConsoleApplication
 {
@@ -18,8 +19,46 @@ namespace ConsoleApplication
 		{
 			// MovieServiceScenario(args);
 			// PeopleServiceScenario(args);
-			CompanyServiceScenario(args);
+			// CompanyServiceScenario(args);
+			TVServiceScenario(args);
 		}
+
+		public static void TVServiceScenario(string[] args)
+		{
+			var api = File.ReadAllText("src/Samples/secrets.txt");
+			var service = new TVService(api);
+			//search
+			var data = service.SearchAsync("big bang").Result;
+
+			var best = data.Results.OrderByDescending(x=>x.VoteAverage).First();
+			//one request
+			var settings = new TVAppendSettings();
+			settings.IncludeAlternativeTitles = true;
+			settings.IncludeContentRatings = true;
+			settings.IncludeCredits = true;
+			settings.IncludeImages = true;
+			settings.IncludeKeywords = true;
+			settings.IncludeRecommendations = true;
+			settings.IncludeSimilarTVs = true;
+			settings.IncludeVideos = true;
+			settings.IncludeTranslations = true;
+
+			var details = service.GetDetailsAsync(best.Id, settings).Result;
+
+			//separate requests
+			var titles = service.GetAlternativeTitlesAsync(best.Id).Result;
+			var ratings = service.GetContentRatingsAsync(best.Id).Result;
+			var credits = service.GetCreditsAsync(best.Id).Result;
+			var images = service.GetImagesAsync(best.Id).Result;
+			var keywords = service.GetKeywordsAsync(best.Id).Result;
+			var recommendations = service.GetRecommendationsAsync(best.Id).Result;
+			var similar = service.GetSimilarTVsAsync(best.Id).Result;
+			var videos = service.GetVideosAsync(best.Id).Result;
+			var translations = service.GetTranslationsAsync(best.Id).Result;
+
+			System.Console.WriteLine();
+		}
+
 
 		public static void CompanyServiceScenario(string[] args)
 		{
@@ -34,7 +73,7 @@ namespace ConsoleApplication
 		public static void PeopleServiceScenario(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var service = new PeopleService(api);
+			var service = new PersonService(api);
 			int page = 1;
 			var data = service.SearchAsync(
 				new PeopleSearchSettings

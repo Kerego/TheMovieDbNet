@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace TheMovieDbNet.Models.TVs
@@ -16,7 +17,7 @@ namespace TheMovieDbNet.Models.TVs
 			string overview,
 			double vote_average,
 			int vote_count,
-			string first_air_date,
+			DateTime? first_air_date,
 			string[] origin_country,
 			string name,
 			string original_name,

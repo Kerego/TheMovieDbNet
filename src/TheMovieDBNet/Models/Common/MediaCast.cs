@@ -1,16 +1,15 @@
 using Newtonsoft.Json;
-using TheMovieDbNet.Models.Common;
 
-namespace TheMovieDbNet.Models.Movies
+namespace TheMovieDbNet.Models.Common
 {
 	/// <summary>
-	/// Represents data about cast of a movie.
+	/// Represents data about cast of a media.
 	/// </summary>
-	public class MovieCast : Cast
+	public class MediaCast : Cast
 	{
 		
 		[JsonConstructor]
-		internal MovieCast(
+		internal MediaCast(
 			int id, 
 			string character, 
 			string credit_id,

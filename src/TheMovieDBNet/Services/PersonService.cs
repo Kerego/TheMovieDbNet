@@ -9,7 +9,7 @@ namespace TheMovieDbNet.Services
 	/// <summary>
 	/// Represents a service for accessing movie-related data.
 	/// </summary>
-	public class PeopleService : Service, IPeopleService
+	public class PersonService : Service, IPersonService
 	{
 		private Lazy<PeopleSearchItemConverter> _lazySearchConverter =
 			new Lazy<PeopleSearchItemConverter>(() => new PeopleSearchItemConverter(), true);
@@ -27,7 +27,7 @@ namespace TheMovieDbNet.Services
 		/// Initializes a new instance of PeopleService.
 		/// </summary>
 		/// <param name="apiKey">API key from the movie db developer site</param>
-		public PeopleService(string apiKey) : base(apiKey)
+		public PersonService(string apiKey) : base(apiKey)
 		{
 		}
 

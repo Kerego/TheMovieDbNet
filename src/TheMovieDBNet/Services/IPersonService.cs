@@ -7,7 +7,7 @@ namespace TheMovieDbNet.Services
 	/// <summary>
 	/// Represents abstraction for requesting people-related data from database.
 	/// </summary>
-	public interface IPeopleService
+	public interface IPersonService
 	{
 		/// <summary>
 		/// Gets details of a person.

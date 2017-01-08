@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using TheMovieDbNet.Models.Common;
 
@@ -17,7 +18,7 @@ namespace TheMovieDbNet.Models.TVs
 			string overview,
 			double vote_average,
 			int vote_count,
-			string first_air_date,
+			DateTime? first_air_date,
 			string[] origin_country,
 			string name,
 			string original_name)
@@ -39,7 +40,7 @@ namespace TheMovieDbNet.Models.TVs
 		/// <summary>
 		/// Gets the date of the first air.
 		/// </summary>
-		public string FirstAirDate { get; }
+		public DateTime? FirstAirDate { get; }
 		/// <summary>
 		/// Gets the array of origin countries
 		/// </summary>

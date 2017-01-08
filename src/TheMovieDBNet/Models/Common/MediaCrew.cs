@@ -1,18 +1,17 @@
 using Newtonsoft.Json;
-using TheMovieDbNet.Models.Common;
 
-namespace TheMovieDbNet.Models.Movies
+namespace TheMovieDbNet.Models.Common
 {
 	/// <summary>
-	/// Represents the data about a movie crew member.
+	/// Represents the data about a media crew member.
 	/// </summary>
-	public class MovieCrew : Crew
+	public class MediaCrew : Crew
 	{
 		[JsonConstructor]
-		internal MovieCrew(
+		internal MediaCrew(
 			int id,
-			string credit_id, 
-			string department, 
+			string credit_id,
+			string department,
 			string job,
 			string name,
 			string profile_path) : base(id, credit_id, department, job)

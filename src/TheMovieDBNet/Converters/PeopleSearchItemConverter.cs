@@ -18,11 +18,11 @@ namespace TheMovieDbNet.Converters
 			PeopleSearchItem psi = jo.ToObject<PeopleSearchItem>();
 			
 			psi.MoviesKnownFor = jo
-				.SelectToken("known_for").Where(x => (string)x["media_type"] == "movie")
+				.SelectToken("known_for")?.Where(x => (string)x["media_type"] == "movie")
 				.Select(x => x.ToObject<MovieSearchItem>()).ToArray();
 
 			psi.TVsKnownFor = jo
-				.SelectToken("known_for").Where(x => (string)x["media_type"] == "tv")
+				.SelectToken("known_for")?.Where(x => (string)x["media_type"] == "tv")
 				.Select(x => x.ToObject<TVSearchItem>()).ToArray();
 			return psi;
 		}

@@ -126,17 +126,15 @@ namespace TheMovieDbNet.Models.Movies
 		/// </summary>
 		public string Tagline { get;}
 		
-		
-
 		/// <summary>
-		/// Gets or Sets the Recommendations for the movie.
+		/// Gets the Recommendations for the movie.
 		/// </summary>
-		public SearchResult<MovieSearchItem> Recommendations { get; set; }
+		public SearchResult<MovieSearchItem> Recommendations { get; }
 		
 		/// <summary>
-		/// Gets or Sets the similar movies.
+		/// Gets the similar movies.
 		/// </summary>
-		public SearchResult<MovieSearchItem> SimilarMovies { get; set; }
+		public SearchResult<MovieSearchItem> SimilarMovies { get; }
 
 		/// <summary>
 		/// Gets or Sets the videos of the movie.
@@ -160,13 +158,13 @@ namespace TheMovieDbNet.Models.Movies
 		/// Gets or Sets cast of the movie.
 		/// </summary>
 		[JsonIgnore]
-		public MovieCast[] Cast { get; set; }
+		public MediaCast[] Cast { get; set; }
 
 		/// <summary>
 		/// Gets or Sets crew of the movie.
 		/// </summary>
 		[JsonIgnore]
-		public MovieCrew[] Crew { get; set;}
+		public MediaCrew[] Crew { get; set;}
 
 		/// <summary>
 		/// Gets or Sets alternative titles for the movie.

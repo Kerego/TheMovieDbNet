@@ -22,6 +22,37 @@ namespace TheMovieDbNet.Services
 
 		}
 
+		
+		/// <summary>
+		/// Gets details of the movie.
+		/// </summary>
+		/// <param name="id">Movie identifier.</param>
+		/// <param name="append">Additional info to append to the response (eg: images, videos).</param>
+		/// <returns>Object of type Movie with fields filled with data.</returns>
+		public async Task<Movie> GetDetailsAsync(int id, string append)
+		{
+			var path = $"/3/movie/{id}?api_key={apiKey}&append_to_response={append}";
+			return await RequestAndDeserialize<Movie>(path, _lazyConverter.Value);
+		}
+
+		/// <summary>
+		/// Gets details of the movie.
+		/// </summary>
+		/// <param name="id">Movie identifier.</param>
+		/// <param name="settings">Additional info to append to the response (eg: images, videos).</param>
+		/// <returns>Object of type Movie with fields filled with data.</returns>
+		public async Task<Movie> GetDetailsAsync(int id, MovieAppendSettings settings)
+			=> await GetDetailsAsync(id, settings.ToString());
+
+			
+		/// <summary>
+		/// Gets details of a movie.
+		/// </summary>
+		/// <param name="id">Movie identifier.</param>
+		/// <returns>Object of type Movie with fields filled with data.</returns>
+		public async Task<Movie> GetDetailsAsync(int id) 
+			=> await GetDetailsAsync(id, string.Empty);
+
 		/// <summary>
 		/// Gets translated titles of the movie.
 		/// </summary>
@@ -49,10 +80,10 @@ namespace TheMovieDbNet.Services
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
 		/// <returns>Credits of the movie.</returns>
-		public async Task<MovieCredits> GetCreditsAsync(int id)
+		public async Task<MediaCredits> GetCreditsAsync(int id)
 		{
 			var path = $"/3/movie/{id}/credits?api_key={apiKey}";
-			return await RequestAndDeserialize<MovieCredits>(path);
+			return await RequestAndDeserialize<MediaCredits>(path);
 		}
 
 		/// <summary>
@@ -213,36 +244,6 @@ namespace TheMovieDbNet.Services
 		/// <returns>Collection of similar movies.</returns>
 		public async Task<SearchResult<MovieSearchItem>> GetSimilarMoviesAsync(int id)
 			=> await GetSimilarMoviesAsync(id, 0, string.Empty);
-
-		/// <summary>
-		/// Gets details of the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <param name="append">Additional info to append to the response (eg: images, videos).</param>
-		/// <returns>Object of type Movie with fields filled with data.</returns>
-		public async Task<Movie> GetDetailsAsync(int id, string append)
-		{
-			var path = $"/3/movie/{id}?api_key={apiKey}&append_to_response={append}";
-			return await RequestAndDeserialize<Movie>(path, _lazyConverter.Value);
-		}
-
-		/// <summary>
-		/// Gets details of the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <param name="settings">Additional info to append to the response (eg: images, videos).</param>
-		/// <returns>Object of type Movie with fields filled with data.</returns>
-		public async Task<Movie> GetDetailsAsync(int id, MovieAppendSettings settings)
-			=> await GetDetailsAsync(id, settings.ToString());
-
-			
-		/// <summary>
-		/// Gets details of a movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <returns>Object of type Movie with fields filled with data.</returns>
-		public async Task<Movie> GetDetailsAsync(int id) 
-			=> await GetDetailsAsync(id, string.Empty);
 
 		/// <summary>
 		/// Gets a page of movies based on search query.

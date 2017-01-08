@@ -53,7 +53,7 @@ namespace TheMovieDbNet.Services
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
 		/// <returns>Credits of the movie.</returns>
-		Task<MovieCredits> GetCreditsAsync(int id);
+		Task<MediaCredits> GetCreditsAsync(int id);
 
 		/// <summary>
 		/// Gets the images of the movie.
