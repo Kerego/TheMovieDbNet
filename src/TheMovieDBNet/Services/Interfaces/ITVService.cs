@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.TVs;
@@ -7,7 +8,7 @@ namespace TheMovieDbNet.Services
 	/// <summary>
 	/// Represents abstraction for requesting people-related data from database.
 	/// </summary>
-	public interface ITVService
+	public interface ITVService : IDisposable
 	{
 		
 		/// <summary>

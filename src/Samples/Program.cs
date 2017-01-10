@@ -10,62 +10,36 @@ using TheMovieDbNet.Models.Common;
 using System.Collections.Generic;
 using System;
 using TheMovieDbNet.Models.TVs;
+using System.Net;
+using System.Text;
+using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace ConsoleApplication
 {
 	public class Program
 	{
+
 		public static void Main(string[] args)
 		{
 			// MovieServiceScenario(args);
 			// PeopleServiceScenario(args);
 			// CompanyServiceScenario(args);
 			// TVServiceScenario(args);
-			// SearchServiceScenario(args);
+			SearchServiceScenario(args);
 			// GetImdbIds().Wait();
-		}
-
-		public static async Task GetImdbIds()
-		{
-			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var service = new MovieService(api);
-
-			using (var stream = File.CreateText("imdb.txt"))
-			{
-				stream.AutoFlush = true;
-				for (int i = 0; i < 10000; i++)
-				{
-					try {
-						var details = await service.GetDetailsAsync(i);
-						var pair = $"{details.Id},{details.ImdbId}";
-						System.Console.WriteLine(pair);
-						await stream.WriteLineAsync(pair);
-					}
-					catch{
-						System.Console.WriteLine($"{i}-missing");
-					}
-				}
-			}
 		}
 		
 		public static void SearchServiceScenario(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
 			var service = new SearchService(api);
-			var personService = new PersonService(api);
-
-
 			var settings = new MovieDiscoverSettings();
-			settings.Genres = new int[] { 12, 16 };
-			// settings.Cast = new int[] { persons1.Results.First().Id, persons2.Results.First().Id };
-			settings.ExcludeGenres = new int[] { 10749 };
-			settings.MinVoteAverage = 8;
-			settings.MinReleaseDate = new DateTime(2010, 1, 1);
 
 			var movies = service.DiscoverMovies(settings).Result;
-			
+		
 			foreach (var item in movies.Results)
-				System.Console.WriteLine($"{item.VoteAverage, 3} | {item.Title, 60} | { String.Join(",", item.GenreIds) }");
+				System.Console.WriteLine($"{item.VoteAverage, 3} | {item.VoteCount, 5} | {item.Title, 60}");
 
 		}
 
@@ -210,22 +184,22 @@ namespace ConsoleApplication
 				Page = 1,
 			}).Result;
 
-			SavePhotos(data.Results.ToArray(), service).Wait();
-			// var best = data.Results.Aggregate((a, b) => a.VoteAverage > b.VoteAverage ? a : b);
+			// SavePhotos(data.Results.ToArray(), service).Wait();
+			var best = data.Results.Aggregate((a, b) => a.VoteAverage > b.VoteAverage ? a : b);
 
-			//one request
-			// var details = service.GetDetailsAsync(best.Id, 
-			// 	new MovieAppendSettings() {
-			// 		IncludeCredits = true,
-			// 		IncludeImages = true,
-			// 		IncludeRecommendations = true,
-			// 		IncludeSimilarMovies = true,
-			// 		IncludeVideos = true,
-			// 		IncludeAlternativeTitles = true,
-			// 		IncludeKeywords = true,
-			// 		IncludeTranslations = true,
-			// 		IncludeReleaseInfo = true,
-			// 	}).Result;
+			// one request
+			var details = service.GetDetailsAsync(best.Id, 
+				new MovieAppendSettings() {
+					IncludeCredits = true,
+					IncludeImages = true,
+					IncludeRecommendations = true,
+					IncludeSimilarMovies = true,
+					IncludeVideos = true,
+					IncludeAlternativeTitles = true,
+					IncludeKeywords = true,
+					IncludeTranslations = true,
+					IncludeReleaseInfo = true,
+				}).Result;
 
 			//multiple
 			// var credits = service.GetCreditsAsync(best.Id).Result;
@@ -238,7 +212,8 @@ namespace ConsoleApplication
 			// var alternative = service.GetAlternativeTitlesAsync(best.Id).Result;
 			// var rec = service.GetRecommendationsAsync(best.Id, 2).Result;
 
-			// System.Console.WriteLine(details.Title);
+			System.Console.WriteLine(details.Id);
+			System.Console.WriteLine(details.ImdbId);
 		}
 
 
@@ -255,7 +230,7 @@ namespace ConsoleApplication
 					title = title.Replace("?", "");
 				}
 				System.Console.WriteLine(title);
-				var release = (string.IsNullOrWhiteSpace(item.ReleaseDate) ? "none" : item.ReleaseDate.Substring(0, 4));
+				var release = item.ReleaseDate.Year;
 				title = $"{item.VoteAverage} - {release} - {title}";
 				Directory.CreateDirectory($"results/{title}");
 				var details = await service.GetDetailsAsync(item.Id, "images,credits");

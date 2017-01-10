@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
+using TheMovieDbNet.Models.TVs;
 
 namespace TheMovieDbNet.Services
 {
@@ -25,6 +26,17 @@ namespace TheMovieDbNet.Services
 		{
 			var path = $"/3/discover/movie?api_key={apiKey}{settings.ToString()}";
 			return await RequestAndDeserialize<SearchResult<MovieSearchItem>>(path);
+		}
+
+			
+		/// <summary>
+		/// Gets a page of dicovered tvs based on dicovery settings.
+		/// </summary>
+		/// <param name="settings">Filter option for discovery.</param>
+		public async Task<SearchResult<TVSearchItem>> DiscoverTVs(TVDiscoverSettings settings)
+		{
+			var path = $"/3/discover/tv?api_key={apiKey}{settings.ToString()}";
+			return await RequestAndDeserialize<SearchResult<TVSearchItem>>(path);
 		}
 	
 	}

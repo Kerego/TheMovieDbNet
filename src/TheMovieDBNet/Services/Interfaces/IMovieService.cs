@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Movies;
@@ -8,7 +9,7 @@ namespace TheMovieDbNet.Services
 	/// <summary>
 	/// Represents abstraction for requesting movie-related data from database.
 	/// </summary>
-	public interface IMovieService
+	public interface IMovieService : IDisposable
 	{
 
 		/// <summary>

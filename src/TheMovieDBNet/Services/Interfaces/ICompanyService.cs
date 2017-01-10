@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using TheMovieDbNet.Models.Common;
 using TheMovieDbNet.Models.Companies;
@@ -7,7 +8,7 @@ namespace TheMovieDbNet.Services
 	/// <summary>
 	/// Represents abstraction for requesting companies-related data from database.
 	/// </summary>
-	public interface ICompanyService
+	public interface ICompanyService : IDisposable
 	{
 		/// <summary>
 		/// Gets details of a company.

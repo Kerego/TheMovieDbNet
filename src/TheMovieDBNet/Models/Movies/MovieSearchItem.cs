@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace TheMovieDbNet.Models.Movies
@@ -21,7 +22,7 @@ namespace TheMovieDbNet.Models.Movies
 			bool video, 
 			double vote_average, 
 			int vote_count, 
-			string release_date,
+			DateTime release_date,
 			int[] genre_ids) : base(id, 
 										adult, 
 										original_language, 

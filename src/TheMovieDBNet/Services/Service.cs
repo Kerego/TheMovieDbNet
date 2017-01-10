@@ -9,13 +9,13 @@ namespace TheMovieDbNet.Services
 	/// <summary>
 	/// Represents a base service for making requests to the movie database
 	/// </summary>
-	public abstract class Service
+	public abstract class Service : IDisposable
 	{
 		/// <summary>
 		/// Client for making http requests
 		/// </summary>
 		protected readonly HttpClient httpClient = new HttpClient();
-		
+
 		/// <summary>
 		/// PI key from the movie db developer site
 		/// </summary>
@@ -42,7 +42,7 @@ namespace TheMovieDbNet.Services
 			using (var result = await httpClient.GetAsync(path))
 			{
 				var content = await result.Content.ReadAsStringAsync();
-				if((int)result.StatusCode == 429)
+				if ((int)result.StatusCode == 429)
 				{
 					await Task.Delay((int)result.Headers.RetryAfter.Delta.Value.TotalMilliseconds + 100);
 					return await RequestAndDeserialize<T>(path, customConverter);
@@ -52,7 +52,7 @@ namespace TheMovieDbNet.Services
 				return JsonConvert.DeserializeObject<T>(content, customConverter);
 			}
 		}
-		
+
 		/// <summary>
 		/// Makes a request to the path and then deserialize the result to the generic constraint.
 		/// </summary>
@@ -63,7 +63,7 @@ namespace TheMovieDbNet.Services
 			using (var result = await httpClient.GetAsync(path))
 			{
 				var content = await result.Content.ReadAsStringAsync();
-				if((int)result.StatusCode == 429)
+				if ((int)result.StatusCode == 429)
 				{
 					await Task.Delay((int)result.Headers.RetryAfter.Delta.Value.TotalMilliseconds + 100);
 					return await RequestAndDeserialize<T>(path);
@@ -85,7 +85,7 @@ namespace TheMovieDbNet.Services
 			using (var result = await httpClient.GetAsync(path))
 			{
 				var content = await result.Content.ReadAsStringAsync();
-				if((int)result.StatusCode == 429)
+				if ((int)result.StatusCode == 429)
 				{
 					await Task.Delay((int)result.Headers.RetryAfter.Delta.Value.TotalMilliseconds + 100);
 					return await RequestAndSelect<T>(path, token);
@@ -95,6 +95,14 @@ namespace TheMovieDbNet.Services
 				JObject obj = JObject.Parse(content);
 				return obj.SelectToken(token).ToObject<T>();
 			}
+		}
+
+		/// <summary>
+		/// Disposes the resources.
+		/// </summary>
+		public void Dispose()
+		{
+			httpClient.Dispose();
 		}
 	}
 }
