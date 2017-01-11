@@ -18,8 +18,8 @@ namespace ConsoleApplication
 			// PeopleServiceScenarioAsync(args).Wait();
 			// CompanyServiceScenarioAsync(args).Wait();
 			// TVServiceScenarioAsync(args).Wait();
-			// SearchServiceScenarioAsync(args).Wait();
-			CollectionServiceScenarioAsync(args).Wait();
+			SearchServiceScenarioAsync(args).Wait();
+			// CollectionServiceScenarioAsync(args).Wait();
 		}
 
 		public static async Task CollectionServiceScenarioAsync(string[] args)
@@ -48,6 +48,8 @@ namespace ConsoleApplication
 			var movieSearch = await service.SearchMovieAsync("harry potter");
 			var companySearch = await service.SearchCompanyAsync("Marvel");
 			var personSearch = await service.SearchPersonAsync("eva green");
+			var collection = await service.SearchCollectionAsync("die hard");
+			var keywords = await service.SearchKeywordAsync("self-sacrifice");
 
 			// advanced search by various settings
 			var movieSettings = new MovieDiscoverSettings();

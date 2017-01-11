@@ -118,6 +118,20 @@ namespace TheMovieDbNet.Services
 		}
 
 		/// <summary>
+		/// Gets a page of keywords based on search query.
+		/// </summary>
+		/// <param name="query">Name of the keyword.</param>
+		/// <param name="page">Number of page for search.</param>
+		/// <returns>Search Result with keywords and page data.</returns>
+		public async Task<PagedResult<Keyword>> SearchKeywordAsync(string query, int page = 0)
+		{
+			var path = $"/3/search/keyword?api_key={apiKey}&query={query}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<Keyword>>(path);
+		}
+
+		/// <summary>
 		/// Gets a page of people based on search query.
 		/// </summary>
 		/// <param name="settings">Settings class for detailed search</param>

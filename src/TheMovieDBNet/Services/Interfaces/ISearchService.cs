@@ -80,6 +80,14 @@ namespace TheMovieDbNet.Services
 		Task<PagedResult<CompanySearchItem>> SearchCompanyAsync(string query, int page = 0);
 
 		/// <summary>
+		/// Gets a page of keywords based on search query.
+		/// </summary>
+		/// <param name="query">Name of the keyword.</param>
+		/// <param name="page">Number of page for search.</param>
+		/// <returns>Search Result with keywords and page data.</returns>
+		Task<PagedResult<Keyword>> SearchKeywordAsync(string query, int page = 0);
+
+		/// <summary>
 		/// Gets a page of movie collections based on search query.
 		/// </summary>
 		/// <param name="query">Name of the collection.</param>
