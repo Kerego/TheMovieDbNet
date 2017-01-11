@@ -39,7 +39,10 @@ namespace TheMovieDbNet.Models.TVs
 		/// Gets or Sets whether to append translations to main data or not.
 		/// </summary>
 		public bool IncludeTranslations { get; set; }
-
+		/// <summary>
+		/// Gets or Sets whether to include the external ids.
+		/// </summary>
+		public bool IncludeExternalIds { get; set; }
 		/// <summary>
 		/// Gets or Sets whether to append content ratings to main data or not.
 		/// </summary>
@@ -70,6 +73,8 @@ namespace TheMovieDbNet.Models.TVs
 				query.Append("translations,");
 			if(IncludeContentRatings)
 				query.Append("content_ratings,");
+			if(IncludeExternalIds)
+				query.Append("external_ids,");
 			return query.ToString();
 		}
 	}

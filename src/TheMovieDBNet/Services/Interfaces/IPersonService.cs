@@ -14,17 +14,33 @@ namespace TheMovieDbNet.Services
 		/// Gets details of a person.
 		/// </summary>
 		/// <param name="id">Person identifier.</param>
-		/// <returns>Object of type person with fields filled with data.</returns>
-		Task<Person> GetDetailsAsync(int id);
-
-		/// <summary>
-		/// Gets details of a person.
-		/// </summary>
-		/// <param name="id">Person identifier.</param>
 		/// <param name="append">Additional info to append to the response (eg: images, videos).</param>
 		/// <returns>Object of type person with fields filled with data.</returns>
-		Task<Person> GetDetailsAsync(int id, string append);
+		Task<Person> GetDetailsAsync(int id, string append = "");
 		
+		/// <summary>
+		/// Gets the last added person.
+		/// </summary>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>Person object with details.</returns>
+		Task<Person> GetLatestAsync(string language = "");
+
+		/// <summary>
+		/// Get the list of popular people on TMDb. This list updates daily.
+		/// </summary>
+		/// <param name="page">Page of the result.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>Paged Result with people and page data.</returns>
+		Task<PagedResult<PeopleSearchItem>> GetPopularAsync(int page = 0, string language = "");
+
+		/// <summary>
+		/// Gets person identifiers on external sites.
+		/// </summary>
+		/// <param name="id">Person identifier.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>External ids for person.</returns>
+		Task<PeopleExternals> GetExternalIdsAsync(int id, string language = "");
+
 		/// <summary>
 		/// Gets details of a person.
 		/// </summary>
@@ -37,16 +53,9 @@ namespace TheMovieDbNet.Services
 		/// Gets the cast and crew of the person.
 		/// </summary>
 		/// <param name="id">Person identifier.</param>
-		/// <returns>Credits of the person.</returns>
-		Task<PersonCredits> GetCreditsAsync(int id);
-
-		/// <summary>
-		/// Gets the cast and crew of the person.
-		/// </summary>
-		/// <param name="id">Person identifier.</param>
 		/// <param name="language">Language of the media.</param>
 		/// <returns>Credits of the person.</returns>
-		Task<PersonCredits> GetCreditsAsync(int id, string language);
+		Task<PersonCredits> GetCreditsAsync(int id, string language = "");
 
 		/// <summary>
 		/// Gets the images of the person.
@@ -54,22 +63,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="id">person identifier.</param>
 		/// <returns>Collection with the images of the person.</returns>
 		Task<Image[]> GetImagesAsync(int id);
-
-		/// <summary>
-		/// Gets the tagged images of the person.
-		/// </summary>
-		/// <param name="id">person identifier.</param>
-		/// <returns>Collection with the images of the person.</returns>
-		Task<TaggedImageCollection> GetTaggedImagesAsync(int id);
 		
-		/// <summary>
-		/// Gets the tagged images of the person.
-		/// </summary>
-		/// <param name="id">person identifier.</param>
-		/// <param name="page">Page of the tagged images search result.</param>
-		/// <returns>Collection with the images of the person.</returns>
-		Task<TaggedImageCollection> GetTaggedImagesAsync(int id, int page);
-
 		/// <summary>
 		/// Gets the tagged images of the person.
 		/// </summary>
@@ -77,21 +71,14 @@ namespace TheMovieDbNet.Services
 		/// <param name="language">Language of the image.</param>
 		/// <param name="page">Page of the tagged images search result.</param>
 		/// <returns>Collection with the images of the person.</returns>
-		Task<TaggedImageCollection> GetTaggedImagesAsync(int id, int page, string language);
+		Task<TaggedImageCollection> GetTaggedImagesAsync(int id, int page = 0, string language = "");
 
 		/// <summary>
 		/// Gets a page of people based on search query.
 		/// </summary>
 		/// <param name="settings">Settings class for detailed search</param>
 		/// <returns>Search Result with people and page data.</returns>
-		Task<SearchResult<PeopleSearchItem>> SearchAsync(PeopleSearchSettings settings);
-
-		/// <summary>
-		/// Gets a page of people based on search query.
-		/// </summary>
-		/// <param name="query">Name of the person.</param>
-		/// <returns>Search Result with people and page data.</returns>
-		Task<SearchResult<PeopleSearchItem>> SearchAsync(string query);
+		Task<PagedResult<PeopleSearchItem>> SearchAsync(PeopleSearchSettings settings);
 
 		/// <summary>
 		/// Gets a page of people based on search query.
@@ -99,6 +86,6 @@ namespace TheMovieDbNet.Services
 		/// <param name="query">Name of the person.</param>
 		/// <param name="page">Number of page for search</param>
 		/// <returns>Search Result with people and page data.</returns>
-		Task<SearchResult<PeopleSearchItem>> SearchAsync(string query, int page);
+		Task<PagedResult<PeopleSearchItem>> SearchAsync(string query, int page = 0);
 	}
 }

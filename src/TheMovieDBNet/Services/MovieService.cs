@@ -22,14 +22,102 @@ namespace TheMovieDbNet.Services
 
 		}
 
-		
+		/// <summary>
+		/// Gets the mosty newly created movie.
+		/// </summary>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>Object of type Movie with filled details.</returns>
+		public async Task<Movie> GetLatestAsync(string language = "")
+		{
+			var path = $"/3/movie/latest?api_key={apiKey}";
+			if(!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			return await RequestAndDeserialize<Movie>(path, _lazyConverter.Value);
+		}
+
+		/// <summary>
+		/// Gets the list of upcoming movies.
+		/// </summary>
+		/// <param name="page">Page of results.</param>
+		/// <param name="region">Region of the theatres.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>A page of the dated results.</returns>
+		public async Task<DatedPagedResult<MovieSearchItem>> GetUpcomingAsync(int page = 0, string region = "", string language = "")
+		{
+			var path = $"/3/movie/upcoming?api_key={apiKey}";
+			if(!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if(!string.IsNullOrWhiteSpace(region))
+				path += $"&region={region}";
+			if(page > 0)
+				path +=$"&page={page}";
+			return await RequestAndDeserialize<DatedPagedResult<MovieSearchItem>>(path);
+		}
+
+		/// <summary>
+		/// Gets the list of movies in theatres.
+		/// </summary>
+		/// <param name="page">Page of results.</param>
+		/// <param name="region">Region of the theatres.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>A page of the dated results.</returns>
+		public async Task<DatedPagedResult<MovieSearchItem>> GetNowPlayingAsync(int page = 0, string region = "", string language = "")
+		{
+			var path = $"/3/movie/now_playing?api_key={apiKey}";
+			if(!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if(!string.IsNullOrWhiteSpace(region))
+				path += $"&region={region}";
+			if(page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<DatedPagedResult<MovieSearchItem>>(path);
+		}
+
+		/// <summary>
+		/// Gets the list of popular movies.
+		/// </summary>
+		/// <param name="page">Page of results.</param>
+		/// <param name="region">Region to search.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>A page of the dated results.</returns>
+		public async Task<PagedResult<MovieSearchItem>> GetPopularAsync(int page = 0, string region = "", string language = "")
+		{
+			var path = $"/3/movie/popular?api_key={apiKey}";
+			if(!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if(!string.IsNullOrWhiteSpace(region))
+				path += $"&region={region}";
+			if(page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<MovieSearchItem>>(path);
+		}
+
+		/// <summary>
+		/// Gets the list of top rated movies.
+		/// </summary>
+		/// <param name="page">Page of results.</param>
+		/// <param name="region">Region to search.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>A page of the dated results.</returns>
+		public async Task<PagedResult<MovieSearchItem>> GetTopRatedAsync(int page = 0, string region = "", string language = "")
+		{
+			var path = $"/3/movie/top_rated?api_key={apiKey}";
+			if(!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if(!string.IsNullOrWhiteSpace(region))
+				path += $"&region={region}";
+			if(page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<MovieSearchItem>>(path);
+		}
+
 		/// <summary>
 		/// Gets details of the movie.
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
 		/// <param name="append">Additional info to append to the response (eg: images, videos).</param>
 		/// <returns>Object of type Movie with fields filled with data.</returns>
-		public async Task<Movie> GetDetailsAsync(int id, string append)
+		public async Task<Movie> GetDetailsAsync(int id, string append = "")
 		{
 			var path = $"/3/movie/{id}?api_key={apiKey}&append_to_response={append}";
 			return await RequestAndDeserialize<Movie>(path, _lazyConverter.Value);
@@ -44,30 +132,13 @@ namespace TheMovieDbNet.Services
 		public async Task<Movie> GetDetailsAsync(int id, MovieAppendSettings settings)
 			=> await GetDetailsAsync(id, settings.ToString());
 
-			
-		/// <summary>
-		/// Gets details of a movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <returns>Object of type Movie with fields filled with data.</returns>
-		public async Task<Movie> GetDetailsAsync(int id) 
-			=> await GetDetailsAsync(id, string.Empty);
-
-		/// <summary>
-		/// Gets translated titles of the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <returns>Array of Alternative Titles for movie.</returns>
-		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id) 
-			=> await GetAlternativeTitlesAsync(id, string.Empty);
-
 		/// <summary>
 		/// Gets translated titles of the movie.
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
 		/// <param name="country">Country of translation (eg: es, pt).</param>
 		/// <returns>Array of Alternative Titles for movie.</returns>
-		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id, string country)
+		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id, string country = "")
 		{
 			var path = $"/3/movie/{id}/alternative_titles?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(country))
@@ -90,28 +161,10 @@ namespace TheMovieDbNet.Services
 		/// Gets the images of the movie.
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
-		/// <returns>Collection with the images of the movie.</returns>
-		public async Task<ImageCollection> GetImagesAsync(int id)
-			=> await GetImagesAsync(id, string.Empty, string.Empty);
-
-
-		/// <summary>
-		/// Gets the images of the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <param name="language">Language of the image.</param>
-		/// <returns>Collection with the images of the movie.</returns>
-		public async Task<ImageCollection> GetImagesAsync(int id, string language)
-			=> await GetImagesAsync(id, language, string.Empty);
-
-		/// <summary>
-		/// Gets the images of the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
 		/// <param name="language">Language of the image.</param>
 		/// <param name="includeLanguages">Additional Languages to add to the image. (eg: fr,es,null)</param>
 		/// <returns>Collection with the images of the movie.</returns>
-		public async Task<ImageCollection> GetImagesAsync(int id, string language, string includeLanguages)
+		public async Task<ImageCollection> GetImagesAsync(int id, string language = "", string includeLanguages = "")
 		{
 			var path = $"/3/movie/{id}/images?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
@@ -147,18 +200,9 @@ namespace TheMovieDbNet.Services
 		/// Gets the videos of the movie.
 		/// </summary>
 		/// <param name="id">Movie identifier.</param>
-		/// <returns>Array of videos.</returns>
-		public async Task<Video[]> GetVideosAsync(int id)
-			=> await GetVideosAsync(id, string.Empty);
-
-
-		/// <summary>
-		/// Gets the videos of the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
 		/// <param name="language">Video language.</param>
 		/// <returns>Array of videos.</returns>
-		public async Task<Video[]> GetVideosAsync(int id, string language)
+		public async Task<Video[]> GetVideosAsync(int id, string language = "")
 		{
 			var path = $"/3/movie/{id}/videos?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
@@ -184,32 +228,15 @@ namespace TheMovieDbNet.Services
 		/// <param name="page">Recommendations page number.</param>
 		/// <param name="language">Movie language.</param>
 		/// <returns>Collection of recommendations.</returns>
-		public async Task<SearchResult<MovieSearchItem>> GetRecommendationsAsync(int id, int page, string language)
+		public async Task<PagedResult<MovieSearchItem>> GetRecommendationsAsync(int id, int page = 0, string language = "")
 		{
 			var path = $"/3/movie/{id}/recommendations?api_key={apiKey}";
 			if (page > 0)
 				path += $"&page={page}";
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
-			return await RequestAndDeserialize<SearchResult<MovieSearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<MovieSearchItem>>(path);
 		}
-
-		/// <summary>
-		/// Gets the recommendations for the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <param name="page">Recommendations page number.</param>
-		/// <returns>Collection of recommendations.</returns>
-		public async Task<SearchResult<MovieSearchItem>> GetRecommendationsAsync(int id, int page)
-			=> await GetRecommendationsAsync(id, page, string.Empty);
-
-		/// <summary>
-		/// Gets the recommendations for the movie.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <returns>Collection of recommendations.</returns>
-		public async Task<SearchResult<MovieSearchItem>> GetRecommendationsAsync(int id)
-			=> await GetRecommendationsAsync(id, 0, string.Empty);
 
 		/// <summary>
 		/// Gets the similar movies.
@@ -218,57 +245,25 @@ namespace TheMovieDbNet.Services
 		/// <param name="page">Similar movies page number.</param>
 		/// <param name="language">Movie language.</param>
 		/// <returns>Collection of similar movies.</returns>
-		public async Task<SearchResult<MovieSearchItem>> GetSimilarMoviesAsync(int id, int page, string language)
+		public async Task<PagedResult<MovieSearchItem>> GetSimilarMoviesAsync(int id, int page = 0, string language = "")
 		{
 			var path = $"/3/movie/{id}/similar_movies?api_key={apiKey}";
 			if (page > 0)
 				path += $"&page={page}";
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
-			return await RequestAndDeserialize<SearchResult<MovieSearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<MovieSearchItem>>(path);
 		}
-
-		/// <summary>
-		/// Gets the similar movies.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <param name="page">Similar movies page number.</param>
-		/// <returns>Collection of similar movies.</returns>
-		public async Task<SearchResult<MovieSearchItem>> GetSimilarMoviesAsync(int id, int page)
-			=> await GetSimilarMoviesAsync(id, page, string.Empty);
-
-		/// <summary>
-		/// Gets the similar movies.
-		/// </summary>
-		/// <param name="id">Movie identifier.</param>
-		/// <returns>Collection of similar movies.</returns>
-		public async Task<SearchResult<MovieSearchItem>> GetSimilarMoviesAsync(int id)
-			=> await GetSimilarMoviesAsync(id, 0, string.Empty);
 
 		/// <summary>
 		/// Gets a page of movies based on search query.
 		/// </summary>
 		/// <param name="settings">Settings class for detailed search</param>
 		/// <returns>Search Result with movies and page data.</returns>
-		public async Task<SearchResult<MovieSearchItem>> SearchAsync(MovieSearchSettings settings)
+		public async Task<PagedResult<MovieSearchItem>> SearchAsync(MovieSearchSettings settings)
 		{
 			var path = $"/3/search/movie?api_key={apiKey}{settings}";
-			return await RequestAndDeserialize<SearchResult<MovieSearchItem>>(path);
-		}
-
-		/// <summary>
-		/// Gets a page of movies based on search query.
-		/// </summary>
-		/// <param name="query">Name of the movie.</param>
-		/// <returns>Search Result with movies and page data.</returns>
-		public async Task<SearchResult<MovieSearchItem>> SearchAsync(string query)
-		{
-			var settings = new MovieSearchSettings
-			{
-				Query = query,
-				Page = 1
-			};
-			return await SearchAsync(settings);
+			return await RequestAndDeserialize<PagedResult<MovieSearchItem>>(path);
 		}
 
 		/// <summary>
@@ -277,7 +272,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="query">Name of the movie.</param>
 		/// <param name="page">Number of page for search</param>
 		/// <returns>Search Result with movies and page data.</returns>
-		public async Task<SearchResult<MovieSearchItem>> SearchAsync(string query, int page)
+		public async Task<PagedResult<MovieSearchItem>> SearchAsync(string query, int page = 0)
 		{
 			var settings = new MovieSearchSettings
 			{

@@ -25,17 +25,9 @@ namespace TheMovieDbNet.Services
 		/// Gets details of a tv.
 		/// </summary>
 		/// <param name="id">Tv identifier.</param>
-		/// <returns>Object of type tv with fields filled with data.</returns>
-		public async Task<TV> GetDetailsAsync(int id)
-			=> await GetDetailsAsync(id, string.Empty);
-
-		/// <summary>
-		/// Gets details of a tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
 		/// <param name="append">Additional info to append to the response (eg: images, videos).</param>
 		/// <returns>Object of type tv with fields filled with data.</returns>
-		public async Task<TV> GetDetailsAsync(int id, string append)
+		public async Task<TV> GetDetailsAsync(int id, string append = "")
 		{
 			var path = $"/3/tv/{id}?api_key={apiKey}&append_to_response={append}";
 			return await RequestAndDeserialize<TV>(path, _lazyConverter.Value);
@@ -51,12 +43,95 @@ namespace TheMovieDbNet.Services
 			=> await GetDetailsAsync(id, settings.ToString());
 
 		/// <summary>
-		/// Gets content rating for the tv series.
+		/// Gets tv identifiers on external sites.
 		/// </summary>
 		/// <param name="id">Tv identifier.</param>
-		/// <returns>Array of ContentRatings Titles for tv.</returns>
-		public async Task<ContentRating[]> GetContentRatingsAsync(int id)
-			=> await GetContentRatingsAsync(id, string.Empty);
+		/// <param name="language">Language of the result.</param>
+		/// <returns>External ids for tv.</returns>
+		public async Task<TVExternals> GetExternalIdsAsync(int id, string language = "")
+		{
+			var path = $"/3/tv/{id}/external_ids?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			return await RequestAndDeserialize<TVExternals>(path);
+		}
+
+		/// <summary>
+		/// Gets the latest added tv.
+		/// </summary>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>TV object with filled details.</returns>
+		public async Task<TV> GetLatestAsync(string language = "")
+		{
+			var path = $"/3/tv/latest?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			return await RequestAndDeserialize<TV>(path, _lazyConverter.Value);
+		}
+
+		/// <summary>
+		/// Gets the list of tv shows that are airing today.
+		/// </summary>
+		/// <param name="page">Page of result.</param>
+		/// <param name="language">Language of result.</param>
+		/// <returns>Search results along with page data.</returns>
+		public async Task<PagedResult<TVSearchItem>> GetAiringTodayAsync(int page = 0, string language = "")
+		{
+			var path = $"/3/tv/airing_today?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
+		}
+
+		/// <summary>
+		/// Gets the list of tv shows that are currently on the air.
+		/// </summary>
+		/// <param name="page">Page of result.</param>
+		/// <param name="language">Language of result.</param>
+		/// <returns>Search results along with page data.</returns>
+		public async Task<PagedResult<TVSearchItem>> GetOnTheAirAsync(int page = 0, string language = "")
+		{
+			var path = $"/3/tv/on_the_air?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
+		}
+
+		/// <summary>
+		/// Gets the list of tv shows that are popular.
+		/// </summary>
+		/// <param name="page">Page of result.</param>
+		/// <param name="language">Language of result.</param>
+		/// <returns>Search results along with page data.</returns>
+		public async Task<PagedResult<TVSearchItem>> GetPopularAsync(int page = 0, string language = "")
+		{
+			var path = $"/3/tv/popular?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
+		}
+
+		/// <summary>
+		/// Gets the list of tv shows that are top rated.
+		/// </summary>
+		/// <param name="page">Page of result.</param>
+		/// <param name="language">Language of result.</param>
+		/// <returns>Search results along with page data.</returns>
+		public async Task<PagedResult<TVSearchItem>> GetTopRatedAsync(int page = 0, string language = "")
+		{
+			var path = $"/3/tv/top_rated?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
+		}
 
 		/// <summary>
 		/// Gets content rating for the tv series.
@@ -64,7 +139,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="id">Tv identifier.</param>
 		/// <param name="language">Language of rating.</param>
 		/// <returns>Array of ContentRatings Titles for tv.</returns>
-		public async Task<ContentRating[]> GetContentRatingsAsync(int id, string language)
+		public async Task<ContentRating[]> GetContentRatingsAsync(int id, string language = "")
 		{
 			var path = $"/3/tv/{id}/content_ratings?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
@@ -76,31 +151,15 @@ namespace TheMovieDbNet.Services
 		/// Gets translated titles of the tv.
 		/// </summary>
 		/// <param name="id">Tv identifier.</param>
-		/// <returns>Array of Alternative Titles for tv.</returns>
-		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id)
-			=> await GetAlternativeTitlesAsync(id, string.Empty);
-
-		/// <summary>
-		/// Gets translated titles of the tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
 		/// <param name="language">Language of translation (eg: es, pt).</param>
 		/// <returns>Array of Alternative Titles for tv.</returns>
-		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id, string language)
+		public async Task<AlternativeTitle[]> GetAlternativeTitlesAsync(int id, string language = "")
 		{
 			var path = $"/3/tv/{id}/alternative_titles?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
 			return await RequestAndSelect<AlternativeTitle[]>(path, "results");
 		}
-
-		/// <summary>
-		/// Gets the cast and crew of the tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
-		/// <returns>Credits of the tv.</returns>
-		public async Task<MediaCredits> GetCreditsAsync(int id) 
-			=> await GetCreditsAsync(id, string.Empty);
 		
 		/// <summary>
 		/// Gets the cast and crew of the tv.
@@ -108,7 +167,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="id">Tv identifier.</param>
 		/// <param name="language">Language of translation.</param>
 		/// <returns>Credits of the tv.</returns>
-		public async Task<MediaCredits> GetCreditsAsync(int id, string language)
+		public async Task<MediaCredits> GetCreditsAsync(int id, string language = "")
 		{
 			var path = $"/3/tv/{id}/credits?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
@@ -120,18 +179,9 @@ namespace TheMovieDbNet.Services
 		/// Gets the images of the tv.
 		/// </summary>
 		/// <param name="id">Tv identifier.</param>
-		/// <returns>Collection with the images of the tv.</returns>
-		public async Task<ImageCollection> GetImagesAsync(int id)
-			=> await GetImagesAsync(id, string.Empty);
-		
-		/// <summary>
-		/// Gets the images of the tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
 		/// <param name="language">Language of the image.</param>
 		/// <returns>Collection with the images of the tv.</returns>
-
-		public async Task<ImageCollection> GetImagesAsync(int id, string language)
+		public async Task<ImageCollection> GetImagesAsync(int id, string language = "")
 		{
 			var path = $"/3/tv/{id}/images?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
@@ -154,17 +204,9 @@ namespace TheMovieDbNet.Services
 		/// Gets the videos of the tv.
 		/// </summary>
 		/// <param name="id">Tv identifier.</param>
-		/// <returns>Array of videos.</returns>
-		public async Task<Video[]> GetVideosAsync(int id)
-			=> await GetVideosAsync(id, string.Empty);
-
-		/// <summary>
-		/// Gets the videos of the tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
 		/// <param name="language">Video language.</param>
 		/// <returns>Array of videos.</returns>
-		public async Task<Video[]> GetVideosAsync(int id, string language)		
+		public async Task<Video[]> GetVideosAsync(int id, string language = "")
 		{
 			var path = $"/3/tv/{id}/videos?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
@@ -188,34 +230,17 @@ namespace TheMovieDbNet.Services
 		/// </summary>
 		/// <param name="id">Tv identifier.</param>
 		/// <param name="page">Recommendations page number.</param>
-		/// <param name="language">tv language.</param>
+		/// <param name="language">Tv language.</param>
 		/// <returns>Collection of recommendations.</returns>
-		public async Task<SearchResult<TVSearchItem>> GetRecommendationsAsync(int id, int page, string language)
+		public async Task<PagedResult<TVSearchItem>> GetRecommendationsAsync(int id, int page = 0, string language = "")
 		{
 			var path = $"/3/tv/{id}/recommendations?api_key={apiKey}";
 			if (page > 0)
 				path += $"&page={page}";
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
-			return await RequestAndDeserialize<SearchResult<TVSearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
 		}
-		
-		/// <summary>
-		/// Gets the recommendations for the tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
-		/// <param name="page">Recommendations page number.</param>
-		/// <returns>Collection of recommendations.</returns>
-		public async Task<SearchResult<TVSearchItem>> GetRecommendationsAsync(int id, int page)
-			=> await GetRecommendationsAsync(id, page, string.Empty);
-
-		/// <summary>
-		/// Gets the recommendations for the tv.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
-		/// <returns>Collection of recommendations.</returns>
-		public async Task<SearchResult<TVSearchItem>> GetRecommendationsAsync(int id)
-			=> await GetRecommendationsAsync(id, 0, string.Empty);
 
 		/// <summary>
 		/// Gets the similar tvs.
@@ -224,45 +249,14 @@ namespace TheMovieDbNet.Services
 		/// <param name="page">Similar tvs page number.</param>
 		/// <param name="language">tv language.</param>
 		/// <returns>Collection of similar tvs.</returns>
-		public async Task<SearchResult<TVSearchItem>> GetSimilarTVsAsync(int id, int page, string language)
+		public async Task<PagedResult<TVSearchItem>> GetSimilarTVsAsync(int id, int page = 0, string language = "")
 		{
 			var path = $"/3/tv/{id}/similar?api_key={apiKey}";
 			if (page > 0)
 				path += $"&page={page}";
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
-			return await RequestAndDeserialize<SearchResult<TVSearchItem>>(path);
-		}
-
-		/// <summary>
-		/// Gets the similar tvs.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
-		/// <param name="page">Similar tvs page number.</param>
-		/// <returns>Collection of similar tvs.</returns>
-		public async Task<SearchResult<TVSearchItem>> GetSimilarTVsAsync(int id, int page)
-			=> await GetSimilarTVsAsync(id, page, string.Empty);
-		
-		/// <summary>
-		/// Gets the similar tvs.
-		/// </summary>
-		/// <param name="id">Tv identifier.</param>
-		/// <returns>Collection of similar tvs.</returns>
-		public async Task<SearchResult<TVSearchItem>> GetSimilarTVsAsync(int id)
-			=> await GetSimilarTVsAsync(id, 0, string.Empty);
-
-		/// <summary>
-		/// Gets a page of tv based on search query.
-		/// </summary>
-		/// <param name="query">Name of the tv.</param>
-		/// <returns>Search Result with tv and page data.</returns>
-		public async Task<SearchResult<TVSearchItem>> SearchAsync(string query)
-		{
-			return await SearchAsync(new TVSearchSettings
-			{
-				Query = query,
-				Page = 1
-			});
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
 		}
 
 		/// <summary>
@@ -271,7 +265,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="query">Name of the tv.</param>
 		/// <param name="page">Number of page for search.</param>
 		/// <returns>Search Result with tv and page data.</returns>
-		public async Task<SearchResult<TVSearchItem>> SearchAsync(string query, int page)
+		public async Task<PagedResult<TVSearchItem>> SearchAsync(string query, int page = 0)
 		{
 			return await SearchAsync(new TVSearchSettings
 			{
@@ -285,10 +279,10 @@ namespace TheMovieDbNet.Services
 		/// </summary>
 		/// <param name="settings">Settings class for detailed search.</param>
 		/// <returns>Search Result with tv and page data.</returns>
-		public async Task<SearchResult<TVSearchItem>> SearchAsync(TVSearchSettings settings)
+		public async Task<PagedResult<TVSearchItem>> SearchAsync(TVSearchSettings settings)
 		{
 			var path = $"/3/search/tv?api_key={apiKey}{settings}";
-			return await RequestAndDeserialize<SearchResult<TVSearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
 		}
 	}
 }

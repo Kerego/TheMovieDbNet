@@ -35,16 +35,9 @@ namespace TheMovieDbNet.Services
 		/// Gets details of a person.
 		/// </summary>
 		/// <param name="id">Person identifier.</param>
-		/// <returns>Object of type person with fields filled with data.</returns>
-		public async Task<Person> GetDetailsAsync(int id) => await GetDetailsAsync(id, string.Empty);
-
-		/// <summary>
-		/// Gets details of a person.
-		/// </summary>
-		/// <param name="id">Person identifier.</param>
 		/// <param name="append">Additional info to append to the response (eg: images, videos).</param>
 		/// <returns>Object of type person with fields filled with data.</returns>
-		public async Task<Person> GetDetailsAsync(int id, string append)
+		public async Task<Person> GetDetailsAsync(int id, string append = "")
 		{
 			var path = $"/3/person/{id}?api_key={apiKey}&append_to_response={append}";
 			return await RequestAndDeserialize<Person>(path, _lazyPersonConverter.Value);
@@ -59,13 +52,50 @@ namespace TheMovieDbNet.Services
 		public async Task<Person> GetDetailsAsync(int id, PersonAppendSettings settings)
 			=> await GetDetailsAsync(id, settings.ToString());
 
+		
 		/// <summary>
-		/// Gets the cast and crew of the person.
+		/// Gets person identifiers on external sites.
 		/// </summary>
-		/// <param name="id">person identifier.</param>
-		/// <returns>Credits of the person.</returns>
-		public async Task<PersonCredits> GetCreditsAsync(int id)
-			=> await GetCreditsAsync(id, string.Empty);
+		/// <param name="id">Person identifier.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>External ids for person.</returns>
+		public async Task<PeopleExternals> GetExternalIdsAsync(int id, string language = "")
+		{
+			var path = $"/3/person/{id}/external_ids?api_key={apiKey}";
+			if (!String.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			return await RequestAndDeserialize<PeopleExternals>(path);
+		}
+
+		/// <summary>
+		/// Gets the last added person.
+		/// </summary>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>Person object with details.</returns>
+		public async Task<Person> GetLatestAsync(string language = "") 
+		{
+			var path = $"/3/person/latest?api_key={apiKey}";
+			if (!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			return await RequestAndDeserialize<Person>(path, _lazyPersonConverter.Value);
+
+		}
+
+		/// <summary>
+		/// Get the list of popular people on TMDb. This list updates daily.
+		/// </summary>
+		/// <param name="page">Page of the result.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>Paged Result with people and page data.</returns>
+		public async Task<PagedResult<PeopleSearchItem>> GetPopularAsync(int page = 0, string language = "")
+		{
+			var path = $"/3/person/popular?api_key={apiKey}";
+			if (!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<PeopleSearchItem>>(path, _lazySearchConverter.Value);
+		}
 
 		/// <summary>
 		/// Gets the cast and crew of the person.
@@ -73,7 +103,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="id">Person identifier.</param>
 		/// <param name="language">Language of the media.</param>
 		/// <returns>Credits of the person.</returns>
-		public async Task<PersonCredits> GetCreditsAsync(int id, string language)
+		public async Task<PersonCredits> GetCreditsAsync(int id, string language = "")
 		{
 			var path = $"/3/person/{id}/combined_credits?api_key={apiKey}";
 			if (!string.IsNullOrWhiteSpace(language))
@@ -96,28 +126,10 @@ namespace TheMovieDbNet.Services
 		/// Gets the tagged images of the person.
 		/// </summary>
 		/// <param name="id">person identifier.</param>
-		/// <returns>Collection with the images of the person.</returns>
-		public async Task<TaggedImageCollection> GetTaggedImagesAsync(int id)
-			=> await GetTaggedImagesAsync(id, 0, string.Empty);
-
-		/// <summary>
-		/// Gets the tagged images of the person.
-		/// </summary>
-		/// <param name="id">person identifier.</param>
-		/// <param name="page">Page of the tagged images search result.</param>
-		/// <returns>Collection with the images of the person.</returns>
-		public async Task<TaggedImageCollection> GetTaggedImagesAsync(int id, int page)
-			=> await GetTaggedImagesAsync(id, page, string.Empty);
-
-
-		/// <summary>
-		/// Gets the tagged images of the person.
-		/// </summary>
-		/// <param name="id">person identifier.</param>
 		/// <param name="language">Language of the image.</param>
 		/// <param name="page">Page of the tagged images search result.</param>
 		/// <returns>Collection with the images of the person.</returns>
-		public async Task<TaggedImageCollection> GetTaggedImagesAsync(int id, int page, string language)
+		public async Task<TaggedImageCollection> GetTaggedImagesAsync(int id, int page = 0, string language = "")
 		{
 			var path = $"/3/person/{id}/tagged_images?api_key={apiKey}";
 			if (page > 0)
@@ -132,25 +144,10 @@ namespace TheMovieDbNet.Services
 		/// </summary>
 		/// <param name="settings">Settings class for detailed search</param>
 		/// <returns>Search Result with people and page data.</returns>
-		public async Task<SearchResult<PeopleSearchItem>> SearchAsync(PeopleSearchSettings settings)
+		public async Task<PagedResult<PeopleSearchItem>> SearchAsync(PeopleSearchSettings settings)
 		{
 			var path = $"/3/search/person?api_key={apiKey}{settings}";
-			return await RequestAndDeserialize<SearchResult<PeopleSearchItem>>(path, _lazySearchConverter.Value);
-		}
-
-		/// <summary>
-		/// Gets a page of people based on search query.
-		/// </summary>
-		/// <param name="query">Name of the person.</param>
-		/// <returns>Search Result with people and page data.</returns>
-		public async Task<SearchResult<PeopleSearchItem>> SearchAsync(string query)
-		{
-			var settings = new PeopleSearchSettings
-			{
-				Query = query,
-				Page = 1
-			};
-			return await SearchAsync(settings);
+			return await RequestAndDeserialize<PagedResult<PeopleSearchItem>>(path, _lazySearchConverter.Value);
 		}
 
 		/// <summary>
@@ -159,7 +156,7 @@ namespace TheMovieDbNet.Services
 		/// <param name="query">Name of the person.</param>
 		/// <param name="page">Number of page for search</param>
 		/// <returns>Search Result with people and page data.</returns>
-		public async Task<SearchResult<PeopleSearchItem>> SearchAsync(string query, int page)
+		public async Task<PagedResult<PeopleSearchItem>> SearchAsync(string query, int page = 0)
 		{
 			var settings = new PeopleSearchSettings
 			{

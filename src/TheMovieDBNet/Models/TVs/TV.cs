@@ -37,8 +37,9 @@ namespace TheMovieDbNet.Models.TVs
 			Season[] seasons,
 			string status,
 			string type,
-			SearchResult<TVSearchItem> similar,
-			SearchResult<TVSearchItem> recommendations)
+			PagedResult<TVSearchItem> similar,
+			PagedResult<TVSearchItem> recommendations,
+			TVExternals external_ids)
 		: base(
 			id,
 			popularity,
@@ -69,6 +70,7 @@ namespace TheMovieDbNet.Models.TVs
 			Type = type;
 			SimilarTVs = similar;
 			Recommendations = recommendations;
+			ExternalIds = external_ids;
 		}
 		/// <summary>
 		/// Gets the creators of the tv.
@@ -144,14 +146,19 @@ namespace TheMovieDbNet.Models.TVs
 		public string Type { get; }
 
 		/// <summary>
+		/// Gets the tv identifier on external sites.
+		/// </summary>
+		public TVExternals ExternalIds { get; }
+
+		/// <summary>
 		/// Gets the Recommendations for the tv.
 		/// </summary>
-		public SearchResult<TVSearchItem> Recommendations { get; }
+		public PagedResult<TVSearchItem> Recommendations { get; }
 		
 		/// <summary>
 		/// Gets the similar tvs.
 		/// </summary>
-		public SearchResult<TVSearchItem> SimilarTVs { get;}
+		public PagedResult<TVSearchItem> SimilarTVs { get; }
 
 		/// <summary>
 		/// Gets or Sets the alternative titles for the tv series.

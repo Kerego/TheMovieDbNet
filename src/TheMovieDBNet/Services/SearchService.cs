@@ -22,10 +22,10 @@ namespace TheMovieDbNet.Services
 		/// Gets a page of dicovered movies based on dicovery settings.
 		/// </summary>
 		/// <param name="settings">Filter option for discovery.</param>
-		public async Task<SearchResult<MovieSearchItem>> DiscoverMovies(MovieDiscoverSettings settings)
+		public async Task<PagedResult<MovieSearchItem>> DiscoverMovies(MovieDiscoverSettings settings)
 		{
 			var path = $"/3/discover/movie?api_key={apiKey}{settings.ToString()}";
-			return await RequestAndDeserialize<SearchResult<MovieSearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<MovieSearchItem>>(path);
 		}
 
 			
@@ -33,10 +33,10 @@ namespace TheMovieDbNet.Services
 		/// Gets a page of dicovered tvs based on dicovery settings.
 		/// </summary>
 		/// <param name="settings">Filter option for discovery.</param>
-		public async Task<SearchResult<TVSearchItem>> DiscoverTVs(TVDiscoverSettings settings)
+		public async Task<PagedResult<TVSearchItem>> DiscoverTVs(TVDiscoverSettings settings)
 		{
 			var path = $"/3/discover/tv?api_key={apiKey}{settings.ToString()}";
-			return await RequestAndDeserialize<SearchResult<TVSearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
 		}
 	
 	}

@@ -25,7 +25,8 @@ namespace TheMovieDbNet.Models.People
 			int gender,
 			string homepage,
 			string imdb_id,
-			string place_of_birth) : base(id, profile_path, adult, name, popularity)
+			string place_of_birth,
+			PeopleExternals external_ids) : base(id, profile_path, adult, name, popularity)
 		{
 			AlsoKnownAs = also_known_as;
 			Biography = biography;
@@ -35,6 +36,7 @@ namespace TheMovieDbNet.Models.People
 			Homepage = homepage;
 			ImdbId = imdb_id;
 			PlaceOfBirth = place_of_birth;
+			ExternalIds = external_ids;
 		}
 
 		/// <summary>
@@ -75,6 +77,11 @@ namespace TheMovieDbNet.Models.People
 		/// Gets the place of birth.
 		/// </summary>
 		public string PlaceOfBirth { get; }
+
+		/// <summary>
+		/// Gets the identifier of person on external sites.
+		/// </summary>
+		public PeopleExternals ExternalIds { get; }
 
 		/// <summary>
 		/// Gets or Sets the persons movie casts.

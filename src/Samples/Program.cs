@@ -10,26 +10,21 @@ using TheMovieDbNet.Models.Common;
 using System.Collections.Generic;
 using System;
 using TheMovieDbNet.Models.TVs;
-using System.Net;
-using System.Text;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
 
 namespace ConsoleApplication
 {
 	public class Program
 	{
-
 		public static void Main(string[] args)
 		{
-			// MovieServiceScenario(args);
-			// PeopleServiceScenario(args);
+			// MovieServiceScenarioAsync(args).Wait();
+			PeopleServiceScenarioAsync(args).Wait();
 			// CompanyServiceScenario(args);
-			// TVServiceScenario(args);
-			SearchServiceScenario(args);
+			// TVServiceScenarioAsync(args).Wait();
+			// SearchServiceScenario(args);
 			// GetImdbIds().Wait();
 		}
-		
+
 		public static void SearchServiceScenario(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
@@ -37,46 +32,60 @@ namespace ConsoleApplication
 			var settings = new MovieDiscoverSettings();
 
 			var movies = service.DiscoverMovies(settings).Result;
-		
-			foreach (var item in movies.Results)
-				System.Console.WriteLine($"{item.VoteAverage, 3} | {item.VoteCount, 5} | {item.Title, 60}");
 
+			foreach (var item in movies.Results)
+				System.Console.WriteLine($"{item.VoteAverage,3} | {item.VoteCount,5} | {item.Title,60}");
 		}
 
-		public static void TVServiceScenario(string[] args)
+		public static async Task TVServiceScenarioAsync(string[] args)
 		{
+			//your api key here
 			var api = File.ReadAllText("src/Samples/secrets.txt");
 			var service = new TVService(api);
-			//search
-			var data = service.SearchAsync("big bang").Result;
 
-			var best = data.Results.OrderByDescending(x=>x.VoteAverage).First();
-			//one request
-			var settings = new TVAppendSettings();
-			settings.IncludeAlternativeTitles = true;
-			settings.IncludeContentRatings = true;
-			settings.IncludeCredits = true;
-			settings.IncludeImages = true;
-			settings.IncludeKeywords = true;
-			settings.IncludeRecommendations = true;
-			settings.IncludeSimilarTVs = true;
-			settings.IncludeVideos = true;
-			settings.IncludeTranslations = true;
+			var data = await service.SearchAsync(new TVSearchSettings
+			{
+				Query = (args.Any() ? args[0] : "arrested development"),
+				Page = 1,
+			});
 
-			var details = service.GetDetailsAsync(best.Id, settings).Result;
+			var best = data.Results.Aggregate((a, b) => a.VoteAverage > b.VoteAverage ? a : b);
 
-			//separate requests
-			var titles = service.GetAlternativeTitlesAsync(best.Id).Result;
-			var ratings = service.GetContentRatingsAsync(best.Id).Result;
-			var credits = service.GetCreditsAsync(best.Id).Result;
-			var images = service.GetImagesAsync(best.Id).Result;
-			var keywords = service.GetKeywordsAsync(best.Id).Result;
-			var recommendations = service.GetRecommendationsAsync(best.Id).Result;
-			var similar = service.GetSimilarTVsAsync(best.Id).Result;
-			var videos = service.GetVideosAsync(best.Id).Result;
-			var translations = service.GetTranslationsAsync(best.Id).Result;
+			// details in one request
+			var details = await service.GetDetailsAsync(best.Id,
+				new TVAppendSettings()
+				{
+					IncludeAlternativeTitles = true,
+					IncludeContentRatings = true,
+					IncludeCredits = true,
+					IncludeImages = true,
+					IncludeKeywords = true,
+					IncludeRecommendations = true,
+					IncludeSimilarTVs = true,
+					IncludeVideos = true,
+					IncludeTranslations = true,
+					IncludeExternalIds = true
+				});
 
-			System.Console.WriteLine();
+			//details in multiple erquests
+			var titles = await service.GetAlternativeTitlesAsync(best.Id);
+			var ratings = await service.GetContentRatingsAsync(best.Id);
+			var credits = await service.GetCreditsAsync(best.Id);
+			var images = await service.GetImagesAsync(best.Id);
+			var keywords = await service.GetKeywordsAsync(best.Id);
+			var translations = await service.GetTranslationsAsync(best.Id);
+			var videos = await service.GetVideosAsync(best.Id);
+			var recommendations = await service.GetRecommendationsAsync(best.Id);
+			var similar = await service.GetSimilarTVsAsync(best.Id);
+			var ids = await service.GetExternalIdsAsync(best.Id);
+
+			var popular = await service.GetPopularAsync();
+			var top = await service.GetTopRatedAsync();
+			var upcoming = await service.GetAiringTodayAsync();
+			var now = await service.GetOnTheAirAsync();
+			var last = await service.GetLatestAsync();
+
+			System.Console.WriteLine(details.Name);
 		}
 
 
@@ -90,18 +99,18 @@ namespace ConsoleApplication
 			System.Console.WriteLine();
 		}
 
-		public static void PeopleServiceScenario(string[] args)
+		public static async Task PeopleServiceScenarioAsync(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
 			var service = new PersonService(api);
 			int page = 1;
-			var data = service.SearchAsync(
+			var data = await service.SearchAsync(
 				new PeopleSearchSettings
 				{
 					Query = (args.Any() ? args[0] : "bateman"),
 					AllowAdult = true,
 					Page = page
-				}).Result;
+				});
 
 			// var actorsAndMovies = 
 			// 	data.Results
@@ -113,49 +122,29 @@ namespace ConsoleApplication
 
 			var best = data.Results.OrderByDescending(x => x.Popularity).First();
 
-			var settings = new PersonAppendSettings();
-			settings.IncludeTVCredits = true;
-			settings.IncludeImages = true;
-			settings.IncludeMovieCredits = true;
-			settings.IncludeTaggedImages = true;
-			settings.IncludeCombinedCredits = true;
+			//one request
+			var details = await service.GetDetailsAsync(best.Id, 
+				new PersonAppendSettings
+				{
+					IncludeTVCredits = true,
+					IncludeImages = true,
+					IncludeMovieCredits = true,
+					IncludeTaggedImages = true,
+					IncludeCombinedCredits = true,
+					IncludeExternalIds = true
+				});
 
-			// //one request
-			// var details = service.GetDetailsAsync(best.Id, settings).Result;
-
-			// //multiple
-			// var images = service.GetImagesAsync(best.Id).Result;
-			// var taggedImages = service.GetTaggedImagesAsync(best.Id, 2).Result;
-			var credits = service.GetCreditsAsync(best.Id).Result;
-
-			int currentPage = 1;
-			List<Image> images = new List<Image>();
-			TaggedImageCollection taggedImages;
-			do
-			{
-				taggedImages = service.GetTaggedImagesAsync(best.Id, currentPage).Result;
-				images.AddRange(taggedImages.MovieTaggedImages.Cast<Image>().Concat(taggedImages.TVTaggedImages));
-			} while (currentPage++ < taggedImages.TotalPages);
-
-			SaveImages(new Dictionary<string, Image[]>
-			{
-				[best.Name] = images.ToArray()
-			}).Wait();
+			// multiple
+			var images = await service.GetImagesAsync(best.Id);
+			var taggedImages = await service.GetTaggedImagesAsync(best.Id, 2);
+			var credits = await service.GetCreditsAsync(best.Id);
+			var ids = await service.GetExternalIdsAsync(best.Id);
 
 
-			// var movieservice = new MovieService(api);
-			// var tasks = credits.MovieCast.Select(x => 
-			// {
-			// 	return Task.Run(async () => {
-			// 		return await movieservice.GetDetailsAsync(x.Id);
-			// 	});
-			// });
+			var popular = await service.GetPopularAsync();
+			var n = await service.GetLatestAsync();
 
-			// var movies = Task.WhenAll(tasks).Result;
-			// System.Console.WriteLine(best.Name + " " + best.Id);
-			// foreach (var item in movies.OrderBy(x=>x.VoteAverage))
-			// 	System.Console.WriteLine($"{item.VoteAverage, 2} - {item.Title, -40} - {item.Genres.Select(x=>x.Name).Aggregate("", (a,c) => $"{a} | {c}"), -20}");
-
+			System.Console.WriteLine(best.Name);
 		}
 
 		public static async Task SaveImages(Dictionary<string, Image[]> data)
@@ -173,23 +162,24 @@ namespace ConsoleApplication
 			}
 		}
 
-		public static void MovieServiceScenario(string[] args)
+		public static async Task MovieServiceScenarioAsync(string[] args)
 		{
+			//your api key here
 			var api = File.ReadAllText("src/Samples/secrets.txt");
 			var service = new MovieService(api);
 
-			var data = service.SearchAsync(new MovieSearchSettings
+			var data = await service.SearchAsync(new MovieSearchSettings
 			{
 				Query = (args.Any() ? args[0] : "harry"),
 				Page = 1,
-			}).Result;
+			});
 
-			// SavePhotos(data.Results.ToArray(), service).Wait();
 			var best = data.Results.Aggregate((a, b) => a.VoteAverage > b.VoteAverage ? a : b);
 
-			// one request
-			var details = service.GetDetailsAsync(best.Id, 
-				new MovieAppendSettings() {
+			// details in one request
+			var details = await service.GetDetailsAsync(best.Id,
+				new MovieAppendSettings()
+				{
 					IncludeCredits = true,
 					IncludeImages = true,
 					IncludeRecommendations = true,
@@ -199,21 +189,26 @@ namespace ConsoleApplication
 					IncludeKeywords = true,
 					IncludeTranslations = true,
 					IncludeReleaseInfo = true,
-				}).Result;
+				});
 
-			//multiple
-			// var credits = service.GetCreditsAsync(best.Id).Result;
-			// var images = service.GetImagesAsync(best.Id).Result;
-			// var keywords = service.GetKeywordsAsync(best.Id).Result;
-			// var releaseDates = service.GetReleaseInfoAsync(best.Id).Result;
-			// var translations = service.GetTranslationsAsync(best.Id).Result;
-			// var similar = service.GetSimilarMoviesAsync(best.Id, 3, "en").Result;
-			// var videos = service.GetVideosAsync(best.Id, "en").Result;
-			// var alternative = service.GetAlternativeTitlesAsync(best.Id).Result;
-			// var rec = service.GetRecommendationsAsync(best.Id, 2).Result;
+			//details in multiple erquests
+			var credits = await service.GetCreditsAsync(best.Id);
+			var images = await service.GetImagesAsync(best.Id);
+			var keywords = await service.GetKeywordsAsync(best.Id);
+			var releaseDates = await service.GetReleaseInfoAsync(best.Id);
+			var translations = await service.GetTranslationsAsync(best.Id);
+			var similar = await service.GetSimilarMoviesAsync(best.Id);
+			var videos = await service.GetVideosAsync(best.Id);
+			var alternative = await service.GetAlternativeTitlesAsync(best.Id);
+			var rec = await service.GetRecommendationsAsync(best.Id);
 
-			System.Console.WriteLine(details.Id);
-			System.Console.WriteLine(details.ImdbId);
+			var popular = await service.GetPopularAsync();
+			var top = await service.GetTopRatedAsync();
+			var upcoming = await service.GetUpcomingAsync();
+			var now = await service.GetNowPlayingAsync();
+			var last = await service.GetLatestAsync();
+
+			System.Console.WriteLine(details.Title);
 		}
 
 

@@ -36,8 +36,8 @@ namespace TheMovieDbNet.Models.Movies
 			SpokenLanguage[] spoken_languages,
 			string status,
 			string tagline,
-			SearchResult<MovieSearchItem> recommendations,
-			SearchResult<MovieSearchItem> similar_movies) 
+			PagedResult<MovieSearchItem> recommendations,
+			PagedResult<MovieSearchItem> similar_movies) 
 				: base( id, 
 						adult, 
 						original_language, 
@@ -130,12 +130,12 @@ namespace TheMovieDbNet.Models.Movies
 		/// <summary>
 		/// Gets the Recommendations for the movie.
 		/// </summary>
-		public SearchResult<MovieSearchItem> Recommendations { get; }
+		public PagedResult<MovieSearchItem> Recommendations { get; }
 		
 		/// <summary>
 		/// Gets the similar movies.
 		/// </summary>
-		public SearchResult<MovieSearchItem> SimilarMovies { get; }
+		public PagedResult<MovieSearchItem> SimilarMovies { get; }
 
 		/// <summary>
 		/// Gets or Sets the videos of the movie.

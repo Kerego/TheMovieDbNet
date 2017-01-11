@@ -9,7 +9,6 @@ namespace TheMovieDbNet.Services
 	/// </summary>
 	public class CompanyService : Service, ICompanyService
 	{
-
 		/// <summary>
 		/// Initializes a new instance of CompanyService.
 		/// </summary>
@@ -33,22 +32,14 @@ namespace TheMovieDbNet.Services
 		/// Gets a page of companies based on search query.
 		/// </summary>
 		/// <param name="query">Name of the company.</param>
-		/// <returns>Search Result with company and page data.</returns>
-		public async Task<SearchResult<CompanySearchItem>> SearchAsync(string query)
-			=> await SearchAsync(query, 0);
-
-		/// <summary>
-		/// Gets a page of companies based on search query.
-		/// </summary>
-		/// <param name="query">Name of the company.</param>
 		/// <param name="page">Number of page for search</param>
 		/// <returns>Search Result with company and page data.</returns>
-		public async Task<SearchResult<CompanySearchItem>> SearchAsync(string query, int page)
+		public async Task<PagedResult<CompanySearchItem>> SearchAsync(string query, int page = 0)
 		{
 			var path = $"/3/search/company?api_key={apiKey}&query={query}";
 			if (page > 0)
 				path += $"&page={page}";
-			return await RequestAndDeserialize<SearchResult<CompanySearchItem>>(path);
+			return await RequestAndDeserialize<PagedResult<CompanySearchItem>>(path);
 		}
 	}
 }

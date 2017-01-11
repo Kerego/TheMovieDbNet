@@ -15,12 +15,12 @@ namespace TheMovieDbNet.Services
 		/// Gets a page of dicovered movies based on dicovery settings.
 		/// </summary>
 		/// <param name="settings">Filter option for discovery.</param>
-		Task<SearchResult<MovieSearchItem>> DiscoverMovies(MovieDiscoverSettings settings);
+		Task<PagedResult<MovieSearchItem>> DiscoverMovies(MovieDiscoverSettings settings);
 
 		/// <summary>
 		/// Gets a page of dicovered tvs based on dicovery settings.
 		/// </summary>
 		/// <param name="settings">Filter option for discovery.</param>
-		Task<SearchResult<TVSearchItem>> DiscoverTVs(TVDiscoverSettings settings);
+		Task<PagedResult<TVSearchItem>> DiscoverTVs(TVDiscoverSettings settings);
 	}
 }

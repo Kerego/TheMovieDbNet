@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 namespace TheMovieDbNet.Models.Common
 {
 	/// <summary>
-	/// Represents a generic class that holds data about a search.
+	/// Represents a generic class that holds data about paged data.
 	/// </summary>
-	public class SearchResult<T> where T : Entity
+	public class PagedResult<T> where T : Entity
 	{
 		[JsonConstructor]
-		internal SearchResult(T[] results, int total_results, int total_pages, int page)
+		internal PagedResult(T[] results, int total_results, int total_pages, int page)
 		{
 			Results = results;
 			TotalResults = total_results;

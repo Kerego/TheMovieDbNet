@@ -30,6 +30,11 @@ namespace TheMovieDbNet.Models.People
 		/// Gets or Sets whether to append tagged images to main data or not.
 		/// </summary>
 		public bool IncludeTaggedImages { get; set; }
+		
+		/// <summary>
+		/// Gets or Sets whether to include the external ids.
+		/// </summary>
+		public bool IncludeExternalIds { get; set; }
 
 		/// <summary>
 		/// Gets the settings in form of comma separated values.
@@ -48,6 +53,8 @@ namespace TheMovieDbNet.Models.People
 				query.Append("tv_credits,");
 			if(IncludeMovieCredits)
 				query.Append("movie_credits,");
+			if(IncludeExternalIds)
+				query.Append("external_ids,");
 			return query.ToString();
 		}
 	}
