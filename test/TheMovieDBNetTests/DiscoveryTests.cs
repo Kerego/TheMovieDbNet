@@ -23,7 +23,7 @@ namespace TheMovieDbNet.Tests
 			//When
 			var data = _fixture.SearchService.DiscoverMovies(settings).Result;
 			//Then
-			Assert.True(data.Results.All(x=>x.ReleaseDate.Year == year));
+			Assert.True(data.Results.All(x=>x.ReleaseDate?.Year == year));
 		}
 
 		[Theory]
