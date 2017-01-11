@@ -68,7 +68,7 @@ namespace TheMovieDbNet.Models.Common
 					result.Append(text[i]);
 				else
 				{
-					result.Append(' ');
+					result.Append('_');
 					result.Append(char.ToLower(text[i]));
 				}
 			}

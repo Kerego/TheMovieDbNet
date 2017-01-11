@@ -23,7 +23,7 @@ namespace TheMovieDbNet.Models.Movies
 			bool video, 
 			double vote_average, 
 			int vote_count, 
-			DateTime release_date,
+			DateTime? release_date,
 			string imdb_id,
 			int budget,
 			string homepage,

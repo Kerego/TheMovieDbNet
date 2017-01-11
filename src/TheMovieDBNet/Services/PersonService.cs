@@ -59,12 +59,12 @@ namespace TheMovieDbNet.Services
 		/// <param name="id">Person identifier.</param>
 		/// <param name="language">Language of the result.</param>
 		/// <returns>External ids for person.</returns>
-		public async Task<PeopleExternals> GetExternalIdsAsync(int id, string language = "")
+		public async Task<PersonExternals> GetExternalIdsAsync(int id, string language = "")
 		{
 			var path = $"/3/person/{id}/external_ids?api_key={apiKey}";
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
-			return await RequestAndDeserialize<PeopleExternals>(path);
+			return await RequestAndDeserialize<PersonExternals>(path);
 		}
 
 		/// <summary>
@@ -87,14 +87,14 @@ namespace TheMovieDbNet.Services
 		/// <param name="page">Page of the result.</param>
 		/// <param name="language">Language of the result.</param>
 		/// <returns>Paged Result with people and page data.</returns>
-		public async Task<PagedResult<PeopleSearchItem>> GetPopularAsync(int page = 0, string language = "")
+		public async Task<PagedResult<PersonSearchItem>> GetPopularAsync(int page = 0, string language = "")
 		{
 			var path = $"/3/person/popular?api_key={apiKey}";
 			if (!string.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
 			if (page > 0)
 				path += $"&page={page}";
-			return await RequestAndDeserialize<PagedResult<PeopleSearchItem>>(path, _lazySearchConverter.Value);
+			return await RequestAndDeserialize<PagedResult<PersonSearchItem>>(path, _lazySearchConverter.Value);
 		}
 
 		/// <summary>
@@ -137,33 +137,6 @@ namespace TheMovieDbNet.Services
 			if (!String.IsNullOrWhiteSpace(language))
 				path += $"&language={language}";
 			return await RequestAndDeserialize<TaggedImageCollection>(path, _lazyTaggedCollectionConverter.Value);
-		}
-
-		/// <summary>
-		/// Gets a page of people based on search query.
-		/// </summary>
-		/// <param name="settings">Settings class for detailed search</param>
-		/// <returns>Search Result with people and page data.</returns>
-		public async Task<PagedResult<PeopleSearchItem>> SearchAsync(PeopleSearchSettings settings)
-		{
-			var path = $"/3/search/person?api_key={apiKey}{settings}";
-			return await RequestAndDeserialize<PagedResult<PeopleSearchItem>>(path, _lazySearchConverter.Value);
-		}
-
-		/// <summary>
-		/// Gets a page of people based on search query.
-		/// </summary>
-		/// <param name="query">Name of the person.</param>
-		/// <param name="page">Number of page for search</param>
-		/// <returns>Search Result with people and page data.</returns>
-		public async Task<PagedResult<PeopleSearchItem>> SearchAsync(string query, int page = 0)
-		{
-			var settings = new PeopleSearchSettings
-			{
-				Query = query,
-				Page = page
-			};
-			return await SearchAsync(settings);
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace TheMovieDbNet.Models.People
 			string homepage,
 			string imdb_id,
 			string place_of_birth,
-			PeopleExternals external_ids) : base(id, profile_path, adult, name, popularity)
+			PersonExternals external_ids) : base(id, profile_path, adult, name, popularity)
 		{
 			AlsoKnownAs = also_known_as;
 			Biography = biography;
@@ -81,7 +81,7 @@ namespace TheMovieDbNet.Models.People
 		/// <summary>
 		/// Gets the identifier of person on external sites.
 		/// </summary>
-		public PeopleExternals ExternalIds { get; }
+		public PersonExternals ExternalIds { get; }
 
 		/// <summary>
 		/// Gets or Sets the persons movie casts.

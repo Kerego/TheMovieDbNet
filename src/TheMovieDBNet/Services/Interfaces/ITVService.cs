@@ -143,20 +143,5 @@ namespace TheMovieDbNet.Services
 		/// <param name="language">Language of the result.</param>
 		/// <returns>Collection of similar tvs.</returns>
 		Task<PagedResult<TVSearchItem>> GetSimilarTVsAsync(int id, int page = 0, string language = "");
-
-		/// <summary>
-		/// Gets a page of tv based on search query.
-		/// </summary>
-		/// <param name="query">Name of the tv.</param>
-		/// <param name="page">Number of page for search.</param>
-		/// <returns>Search Result with tv and page data.</returns>
-		Task<PagedResult<TVSearchItem>> SearchAsync(string query, int page = 0);
-		
-		/// <summary>
-		/// Gets a page of tv based on search query.
-		/// </summary>
-		/// <param name="settings">Settings class for detailed search.</param>
-		/// <returns>Search Result with tv and page data.</returns>
-		Task<PagedResult<TVSearchItem>> SearchAsync(TVSearchSettings settings);
 	}
 }

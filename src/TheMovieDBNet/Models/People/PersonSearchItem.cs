@@ -7,10 +7,10 @@ namespace TheMovieDbNet.Models.People
 	/// <summary>
 	/// Represents an item from people search.
 	/// </summary>
-	public class PeopleSearchItem : PersonBase
+	public class PersonSearchItem : PersonBase
 	{
 		[JsonConstructor]
-		internal PeopleSearchItem(
+		internal PersonSearchItem(
 			int id,
 			string profile_path,
 			bool adult,

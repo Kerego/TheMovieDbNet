@@ -6,10 +6,10 @@ namespace TheMovieDbNet.Models.People
 	/// <summary>
 	/// Represents the ids of the entity on external sites;
 	/// </summary>
-	public class PeopleExternals : Externals
+	public class PersonExternals : Externals
 	{
 		[JsonConstructor]
-		internal PeopleExternals(
+		internal PersonExternals(
 			int? tvrage_id,
 			string freebase_id,
 			string imdb_id,

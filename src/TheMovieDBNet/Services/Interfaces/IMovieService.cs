@@ -141,19 +141,5 @@ namespace TheMovieDbNet.Services
 		/// <returns>Collection of similar movies.</returns>
 		Task<PagedResult<MovieSearchItem>> GetSimilarMoviesAsync(int id, int page = 0, string language = "");
 
-		/// <summary>
-		/// Gets a page of movies based on search query.
-		/// </summary>
-		/// <param name="query">Name of the movie.</param>
-		/// <param name="page">Number of page for search</param>
-		/// <returns>Search Result with movies and page data.</returns>
-		Task<PagedResult<MovieSearchItem>> SearchAsync(string query, int page = 0);
-
-		/// <summary>
-		/// Gets a page of movies based on search query.
-		/// </summary>
-		/// <param name="settings">Settings class for detailed search</param>
-		/// <returns>Search Result with movies and page data.</returns>
-		Task<PagedResult<MovieSearchItem>> SearchAsync(MovieSearchSettings settings);
 	}
 }

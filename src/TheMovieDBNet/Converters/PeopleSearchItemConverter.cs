@@ -10,12 +10,12 @@ namespace TheMovieDbNet.Converters
 {
 	internal class PeopleSearchItemConverter : JsonConverter
 	{
-		public override bool CanConvert(Type objectType) => objectType == typeof(PeopleSearchItem);
+		public override bool CanConvert(Type objectType) => objectType == typeof(PersonSearchItem);
 
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
 		{
 			JObject jo = JObject.Load(reader);
-			PeopleSearchItem psi = jo.ToObject<PeopleSearchItem>();
+			PersonSearchItem psi = jo.ToObject<PersonSearchItem>();
 			
 			psi.MoviesKnownFor = jo
 				.SelectToken("known_for")?.Where(x => (string)x["media_type"] == "movie")

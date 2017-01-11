@@ -22,7 +22,7 @@ namespace TheMovieDbNet.Models.Movies
 			bool video, 
 			double vote_average, 
 			int vote_count, 
-			DateTime release_date,
+			DateTime? release_date,
 			int[] genre_ids) : base(id, 
 										adult, 
 										original_language, 

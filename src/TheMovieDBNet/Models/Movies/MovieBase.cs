@@ -24,7 +24,7 @@ namespace TheMovieDbNet.Models.Movies
 			bool video,
 			double vote_average,
 			int vote_count,
-			DateTime release_date) 
+			DateTime? release_date) 
 		: base(
 			id,
 			popularity,
@@ -69,7 +69,7 @@ namespace TheMovieDbNet.Models.Movies
 		/// <summary>
 		/// Gets the realease date of the movie.
 		/// </summary>
-		public DateTime ReleaseDate { get; }
+		public DateTime? ReleaseDate { get; }
 
 	}
 }

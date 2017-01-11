@@ -5,7 +5,7 @@ namespace TheMovieDbNet.Models.People
 	/// <summary>
 	/// Represents movie settings used in search.
 	/// </summary>
-	public class PeopleSearchSettings : SearchSettings
+	public class PersonSearchSettings : SearchSettings
 	{
 		/// <summary>
 		/// Gets or Sets language of search query

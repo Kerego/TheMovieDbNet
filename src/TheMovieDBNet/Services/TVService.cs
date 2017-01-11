@@ -259,30 +259,5 @@ namespace TheMovieDbNet.Services
 			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
 		}
 
-		/// <summary>
-		/// Gets a page of tv based on search query.
-		/// </summary>
-		/// <param name="query">Name of the tv.</param>
-		/// <param name="page">Number of page for search.</param>
-		/// <returns>Search Result with tv and page data.</returns>
-		public async Task<PagedResult<TVSearchItem>> SearchAsync(string query, int page = 0)
-		{
-			return await SearchAsync(new TVSearchSettings
-			{
-				Query = query,
-				Page = page
-			});
-		}
-
-		/// <summary>
-		/// Gets a page of tv based on search query.
-		/// </summary>
-		/// <param name="settings">Settings class for detailed search.</param>
-		/// <returns>Search Result with tv and page data.</returns>
-		public async Task<PagedResult<TVSearchItem>> SearchAsync(TVSearchSettings settings)
-		{
-			var path = $"/3/search/tv?api_key={apiKey}{settings}";
-			return await RequestAndDeserialize<PagedResult<TVSearchItem>>(path);
-		}
 	}
 }
