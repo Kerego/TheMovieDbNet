@@ -18,7 +18,7 @@ namespace TheMovieDbNet.Services
 			new Lazy<PeopleSearchItemConverter>(() => new PeopleSearchItemConverter(), true);
 			
 		/// <summary>
-		/// Initializes a new instance of SearcgService.
+		/// Initializes a new instance of SearchService.
 		/// </summary>
 		/// <param name="apiKey">API key from the movie db developer site</param>
 
