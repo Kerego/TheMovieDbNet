@@ -27,7 +27,7 @@ namespace TheMovieDbNet.Models.Movies
 			string imdb_id,
 			int budget,
 			string homepage,
-			MoviesCollection belongs_to_collection,
+			MovieCollectionSearchItem belongs_to_collection,
 			Genre[] genres,
 			ProductionCompany[] production_companies,
 			ProductionCountry[] production_countries,
@@ -85,7 +85,7 @@ namespace TheMovieDbNet.Models.Movies
 		/// <summary>
 		/// Gets the info about the collection of movies the one belongs to.
 		/// </summary>
-		public MoviesCollection MovieCollection { get; }
+		public MovieCollectionSearchItem MovieCollection { get; }
 
 		/// <summary>
 		/// Gets the info about the genres of the movie.

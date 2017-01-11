@@ -16,15 +16,32 @@ namespace ConsoleApplication
 		{
 			// MovieServiceScenarioAsync(args).Wait();
 			// PeopleServiceScenarioAsync(args).Wait();
-			// // CompanyServiceScenarioAsync(args).Wait();
+			// CompanyServiceScenarioAsync(args).Wait();
 			// TVServiceScenarioAsync(args).Wait();
-			SearchServiceScenarioAsync(args).Wait();
+			// SearchServiceScenarioAsync(args).Wait();
+			CollectionServiceScenarioAsync(args).Wait();
+		}
+
+		public static async Task CollectionServiceScenarioAsync(string[] args)
+		{
+			var api = File.ReadAllText("src/Samples/secrets.txt");
+			var searchService = new SearchService(api);
+			var collectionService = new CollectionService(api);
+
+			var collections = await searchService.SearchCollectionAsync(args.Any() ? args[0] : "harry potter");
+			var firstId = collections.Results.First().Id;
+			
+			var details = await collectionService.GetDetails(firstId);
+			var images = await collectionService.GetImages(firstId);
+
+			System.Console.WriteLine(details.Name);
+			System.Console.WriteLine(details.Overview);
 		}
 
 		public static async Task SearchServiceScenarioAsync(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var service = new SearchService(api);
+			ISearchService service = new SearchService(api);
 
 			// search by names
 			var tvSearch = await service.SearchTVAsync("arrested Development");
@@ -52,7 +69,7 @@ namespace ConsoleApplication
 		{
 			//your api key here
 			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var service = new TVService(api);
+			ITVService service = new TVService(api);
 
 			var popular = await service.GetPopularAsync();
 			var top = await service.GetTopRatedAsync();
@@ -96,8 +113,8 @@ namespace ConsoleApplication
 		public static async Task CompanyServiceScenarioAsync(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var companyService = new CompanyService(api);
-			var searchService = new SearchService(api);
+			ICompanyService companyService = new CompanyService(api);
+			ISearchService searchService = new SearchService(api);
 
 			var data = await searchService.SearchCompanyAsync("Marvel");
 			var details = await companyService.GetDetailsAsync(data.Results.First().Id);
@@ -107,7 +124,7 @@ namespace ConsoleApplication
 		public static async Task PeopleServiceScenarioAsync(string[] args)
 		{
 			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var service = new PersonService(api);
+			IPersonService service = new PersonService(api);
 			
 			var popular = await service.GetPopularAsync();
 			var n = await service.GetLatestAsync();
@@ -139,7 +156,7 @@ namespace ConsoleApplication
 		{
 			//your api key here
 			var api = File.ReadAllText("src/Samples/secrets.txt");
-			var service = new MovieService(api);
+			IMovieService service = new MovieService(api);
 
 			var popular = await service.GetPopularAsync();
 			var top = await service.GetTopRatedAsync();

@@ -143,5 +143,23 @@ namespace TheMovieDbNet.Services
 			};
 			return await SearchPersonAsync(settings);
 		}
+
+		/// <summary>
+		/// Gets a page of movie collections based on search query.
+		/// </summary>
+		/// <param name="query">Name of the collection.</param>
+		/// <param name="page">Number of page for search.</param>
+		/// <param name="language">Language of the result.</param>
+		/// <returns>Search Result with collections and page data.</returns>
+		public async Task<PagedResult<MovieCollectionSearchItem>> SearchCollectionAsync(string query, int page = 0, string language = "")
+		{
+			var path = $"/3/search/collection?api_key={apiKey}&query={query}";
+			if (!string.IsNullOrWhiteSpace(language))
+				path += $"&language={language}";
+			if (page > 0)
+				path += $"&page={page}";
+			return await RequestAndDeserialize<PagedResult<MovieCollectionSearchItem>>(path);
+		}
+
 	}
 }

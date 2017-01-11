@@ -1,15 +1,14 @@
 using Newtonsoft.Json;
-using TheMovieDbNet.Models.Common;
 
-namespace TheMovieDbNet.Models.Movies
-{    
+namespace TheMovieDbNet.Models.Common
+{
 	/// <summary>
-	/// info about a collection of movies
+	/// Represents an item from the movie collection search.
 	/// </summary>
-	public class MoviesCollection : Entity
+	public class MovieCollectionSearchItem : Entity
 	{
 		[JsonConstructor]
-		internal MoviesCollection(int id, string name, string poster_path, string backdrop_path) : base(id)
+		internal MovieCollectionSearchItem(int id, string name, string poster_path, string backdrop_path) : base(id)
 		{
 			Name = name;
 			PosterPath = poster_path;
@@ -17,17 +16,17 @@ namespace TheMovieDbNet.Models.Movies
 		}
 
 		/// <summary>
-		/// Gets the name of the collection
+		/// Gets the name of the collection.
 		/// </summary>
 		public string Name { get; }
 
 		/// <summary>
-		/// Gets the path to the poster image
+		/// Gets the path to the poster image.
 		/// </summary>]
 		public string PosterPath { get; }
 
 		/// <summary>
-		/// Gets the path to the backdrop
+		/// Gets the path to the backdrop.
 		/// </summary>
 		public string BackdropPath { get; }
 	}
