@@ -1,6 +1,25 @@
 {
   "title": "TheMovieDBNet",
   "version": "0.5.0",
+  "description": "A cross-platform API Wrapper for themoviedb.org",
+  "authors": [
+    "Bejenari Marian"
+  ],
+  "packOptions": {
+    "owners": [
+      "Bejenari Marian"
+    ],
+    "projectUrl": "https://github.com/Kerego/TheMovieDbNet",
+    "licenseUrl": "https://github.com/Kerego/TheMovieDbNet/blob/master/License.md",
+    "requireLicenseAcceptance": false,
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/Kerego/TheMovieDbNet"
+    },
+    "tags": [
+      "movies tv db tmdb api wrapper"
+    ]
+  },
   "buildOptions": {
     "debugType": "portable",
     "xmlDoc": true
